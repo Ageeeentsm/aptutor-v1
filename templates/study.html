@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block title %}Study Mode{% endblock %}
+
+{% block extra_css %}
+<style>
+  .study-filter { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .study-card { max-width: 680px; width: 100%; }
+  .study-stats { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .study-stat { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 16px; flex: 1; min-width: 80px; }
+  .study-stat-num { font-family: var(--font-mono); font-size: 20px; font-weight: 600; }
+  .study-stat-label { font-size: 11px; color: var(--text-muted); }
+  @media (max-width: 600px) {
+    .study-filter { flex-direction: column; }
+    .study-filter select { width: 100%; }
+    .study-filter button { width: 100%; justify-content: center; }
+    .study-card { max-width: 100%; }
+  }
+  @media (max-width: 420px) {
+    .study-stat { padding: 8px 12px; }
+    .study-stat-num { font-size: 18px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">📖 Study Mode</h1>
+<p class="page-subtitle">Untimed practice with instant feedback — learn at your own pace</p>
+
+<!-- Filters -->
+<div class="study-filter">
+  <select class="form-input" style="width:auto; min-width:130px;" id="modFilter" onchange="loadQuestion()">
+    <option value="">All Modules</option>
+    <option value="gmat">GMAT</option>
+    <option value="shl">SHL</option>
+    <option value="watson">Watson-Glaser</option>
+  </select>
+  <select class="form-input" style="width:auto; min-width:130px;" id="diffFilter" onchange="loadQuestion()">
+    <option value="">All Difficulties</option>
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+  <button class="btn btn-secondary" onclick="loadQuestion()">🔀 New Random Question</button>
+</div>
+
+<!-- Session stats -->
+<div class="study-stats">
+  <div class="study-stat">
+    <div class="study-stat-num accent" id="sessAttempted">0</div>
+    <div class="study-stat-label">Attempted</div>
+  </div>
+  <div class="study-stat">
+    <div class="study-stat-num success" id="sessCorrect">0</div>
+    <div class="study-stat-label">Correct</div>
+  </div>
+  <div class="study-stat">
+    <div class="study-stat-num" id="sessAcc">—</div>
+    <div class="study-stat-label">Accuracy</div>
+  </div>
+</div>
+
+<!-- Study Question Card -->
+<div class="study-card">
+  <div class="question-card" id="studyQuestion">
+    <div class="question-meta" id="studyMeta"></div>
+    <div class="question-text" id="studyText">Loading...</div>
+    <div class="options-list" id="studyOptions"></div>
+  </div>
+
+  <div class="explanation-panel" id="studyExplanation" style="display:none; max-width:680px;">
+    <div class="exp-tabs">
+      <button class="exp-tab active" onclick="switchTab(this, 'sExpMain')">Explanation</button>
+      <button class="exp-tab" onclick="switchTab(this, 'sExpWrong')">Why Wrong</button>
+      <button class="exp-tab" onclick="switchTab(this, 'sExpTip')">Strategy</button>
+    </div>
+    <div class="exp-content active" id="sExpMain"></div>
+    <div class="exp-content" id="sExpWrong"></div>
+    <div class="exp-content" id="sExpTip"></div>
+  </div>
+
+  <div style="margin-top: 16px;" id="studyNextWrap" style="display:none;">
+    <button class="btn btn-primary btn-lg" onclick="loadQuestion()">Next Question →</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  let currentQ = null;
+  let answered = false;
+  let sessAttempted = 0, sessCorrect = 0;
+  let allQPool = [];
+
+  async function loadQuestion() {
+    answered = false;
+    document.getElementById('studyExplanation').style.display = 'none';
+    document.getElementById('studyNextWrap').style.display = 'none';
+    document.getElementById('studyText').textContent = 'Loading...';
+    document.getElementById('studyOptions').innerHTML = '';
+
+    const mod = document.getElementById('modFilter').value;
+    const diff = document.getElementById('diffFilter').value;
+
+    try {
+      const params = new URLSearchParams({ count: 50 });
+      if (mod) params.append('module', mod);
+      if (diff) params.append('difficulty', diff);
+
+      // Load a pool then pick random
+      if (!allQPool.length || mod || diff) {
+        const res = await fetch(`/api/insights?${params.toString()}`);
+        const data = await res.json();
+        allQPool = data.questions;
+      }
+
+      if (!allQPool.length) {
+        document.getElementById('studyText').textContent = 'No questions found for these filters.';
+        return;
+      }
+
+      currentQ = allQPool[Math.floor(Math.random() * allQPool.length)];
+      renderStudyQuestion(currentQ);
+    } catch (e) {
+      document.getElementById('studyText').textContent = 'Error loading question.';
+    }
+  }
+
+  function renderStudyQuestion(q) {
+    const modColor = q.module === 'gmat' ? 'accent' : q.module === 'shl' ? 'success' : 'warning';
+    const diffColor = q.difficulty === 'easy' ? 'success' : q.difficulty === 'medium' ? 'accent' : 'danger';
+
+    document.getElementById('studyMeta').innerHTML = `
+      <span class="badge badge-${modColor}">${q.module.toUpperCase()}</span>
+      <span class="badge badge-${diffColor}">${q.difficulty}</span>
+      <span class="badge badge-muted">${(q.topic||'').replace(/_/g,' ')}</span>
+    `;
+    document.getElementById('studyText').textContent = q.question;
+
+    const opts = document.getElementById('studyOptions');
+    opts.innerHTML = Object.entries(q.options).map(([k, v]) => `
+      <button class="option-item" onclick="checkAnswer('${k}')" id="opt${k}">
+        <span class="option-key">${k}</span>
+        <span class="option-text">${v}</span>
+      </button>
+    `).join('');
+  }
+
+  function checkAnswer(selected) {
+    if (answered || !currentQ) return;
+    answered = true;
+    sessAttempted++;
+
+    const correct = currentQ.correct;
+    const isCorrect = selected === correct;
+    if (isCorrect) sessCorrect++;
+
+    // Set chatbot context
+    if (window.setChatbotContext) setChatbotContext(currentQ.id, selected);
+
+    // Highlight options
+    Object.keys(currentQ.options).forEach(k => {
+      const btn = document.getElementById(`opt${k}`);
+      btn.disabled = true;
+      if (k === correct) btn.classList.add('correct');
+      else if (k === selected) btn.classList.add('incorrect');
+    });
+
+    // Show explanation
+    const de = currentQ.deep_explanation || {};
+    document.getElementById('sExpMain').innerHTML = `
+      <p>${currentQ.explanation}</p>
+      ${de.why_correct ? `<p style="margin-top:8px;"><strong>Why this is right:</strong> ${de.why_correct}</p>` : ''}
+    `;
+
+    const wrongHtml = Object.entries(de.why_wrong || {}).map(([k,v]) =>
+      `<p style="margin-bottom:8px;"><strong style="color:var(--danger)">Option ${k}:</strong> ${v}</p>`
+    ).join('');
+    document.getElementById('sExpWrong').innerHTML = wrongHtml || '<p>Explanation not available.</p>';
+    document.getElementById('sExpTip').innerHTML = de.strategy_tip
+      ? `<div class="strategy-tip">${de.strategy_tip}</div>`
+      : '<p>No strategy tip available for this question.</p>';
+
+    document.getElementById('studyExplanation').style.display = 'block';
+    document.getElementById('studyNextWrap').style.display = 'block';
+
+    // Update stats
+    const acc = sessAttempted > 0 ? Math.round(sessCorrect / sessAttempted * 100) + '%' : '—';
+    document.getElementById('sessAttempted').textContent = sessAttempted;
+    document.getElementById('sessCorrect').textContent = sessCorrect;
+    document.getElementById('sessAcc').textContent = acc;
+
+    showToast(isCorrect ? '✓ Correct!' : `✗ Incorrect — Answer is ${correct}`, isCorrect ? 'success' : 'error');
+  }
+
+  function switchTab(btn, targetId) {
+    const panel = btn.closest('.explanation-panel');
+    panel.querySelectorAll('.exp-tab').forEach(t => t.classList.remove('active'));
+    panel.querySelectorAll('.exp-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    panel.querySelector('#' + targetId).classList.add('active');
+  }
+
+  // Init
+  loadQuestion();
+</script>
+{% endblock %}

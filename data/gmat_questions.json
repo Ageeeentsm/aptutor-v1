@@ -1,0 +1,336 @@
+[
+  {
+    "id": "gmat_001",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "easy",
+    "topic": "percentages",
+    "question": "A store sells a product for ₦12,000 after applying a 20% discount. What was the original price?",
+    "options": {"A": "₦14,400", "B": "₦15,000", "C": "₦14,000", "D": "₦16,000"},
+    "correct": "B",
+    "explanation": "If the discounted price is ₦12,000 and this represents 80% of the original, then original = 12,000 ÷ 0.8 = ₦15,000.",
+    "deep_explanation": {
+      "why_correct": "Discount of 20% means 80% of original = 12,000. So original = 12,000/0.8 = 15,000.",
+      "why_wrong": {
+        "A": "₦14,400 = 12,000 × 1.2 — this adds 20% to the sale price instead of reversing the discount.",
+        "C": "₦14,000 adds only ₦2,000 — no logical percentage basis.",
+        "D": "₦16,000 would give a 25% discount not 20%."
+      },
+      "strategy_tip": "When reversing a percentage discount, divide by (1 - discount rate). Never add the discount amount directly to the sale price."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["percentages", "reverse_percentage"]
+  },
+  {
+    "id": "gmat_002",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "medium",
+    "topic": "ratios",
+    "question": "In a company, the ratio of male to female employees is 3:2. If there are 120 employees total, how many are female?",
+    "options": {"A": "40", "B": "48", "C": "72", "D": "80"},
+    "correct": "B",
+    "explanation": "Total parts = 3+2 = 5. Female = (2/5) × 120 = 48.",
+    "deep_explanation": {
+      "why_correct": "The ratio 3:2 means for every 5 employees, 2 are female. 2/5 × 120 = 48.",
+      "why_wrong": {
+        "A": "40 = 120/3 — incorrectly divides by 3 instead of using the ratio correctly.",
+        "C": "72 is the number of males (3/5 × 120), not females.",
+        "D": "80 = 120 × 2/3 — incorrectly uses 2/3 instead of 2/5."
+      },
+      "strategy_tip": "For ratio problems, always find the total parts first, then multiply each share by (your fraction / total parts)."
+    },
+    "avg_time_seconds": 35,
+    "tags": ["ratios", "proportions"]
+  },
+  {
+    "id": "gmat_003",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "medium",
+    "topic": "algebra",
+    "question": "If 3x + 7 = 22, what is the value of 6x - 4?",
+    "options": {"A": "26", "B": "30", "C": "26", "D": "10"},
+    "correct": "A",
+    "explanation": "3x + 7 = 22 → 3x = 15 → x = 5. Then 6x - 4 = 30 - 4 = 26.",
+    "deep_explanation": {
+      "why_correct": "Solving: x = 5. Substituting: 6(5) - 4 = 26.",
+      "why_wrong": {
+        "B": "30 = 6x only, forgetting to subtract 4.",
+        "D": "10 is the value of 2x, not 6x - 4."
+      },
+      "strategy_tip": "Always solve for x first, then substitute back. Don't try to shortcut by manipulating the original equation unless you see a clear relationship."
+    },
+    "avg_time_seconds": 30,
+    "tags": ["algebra", "linear_equations"]
+  },
+  {
+    "id": "gmat_004",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "hard",
+    "topic": "work_rate",
+    "question": "Pipe A fills a tank in 6 hours, Pipe B in 4 hours. If both pipes are open together, how long to fill the tank?",
+    "options": {"A": "2.4 hours", "B": "3 hours", "C": "2 hours", "D": "5 hours"},
+    "correct": "A",
+    "explanation": "Combined rate = 1/6 + 1/4 = 2/12 + 3/12 = 5/12. Time = 12/5 = 2.4 hours.",
+    "deep_explanation": {
+      "why_correct": "Add rates: 1/6 + 1/4 = 5/12 tanks/hour. Invert to get time: 12/5 = 2.4 hours.",
+      "why_wrong": {
+        "B": "3 = average of 6 and 4 divided by something — rates don't average like this.",
+        "C": "2 hours assumes both pipes are equally fast as the faster one.",
+        "D": "5 hours = 6+4 divided by 2, a common but wrong approach."
+      },
+      "strategy_tip": "Work rate problems: rates ADD, not times. Find (1/t₁ + 1/t₂), then invert the result."
+    },
+    "avg_time_seconds": 60,
+    "tags": ["work_rate", "combined_work"]
+  },
+  {
+    "id": "gmat_005",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "medium",
+    "topic": "percentages",
+    "question": "A salary increased by 10%, then decreased by 10%. The net effect is:",
+    "options": {"A": "No change", "B": "1% decrease", "C": "1% increase", "D": "2% decrease"},
+    "correct": "B",
+    "explanation": "Let salary = 100. After 10% increase: 110. After 10% decrease: 110 × 0.9 = 99. Net = 1% decrease.",
+    "deep_explanation": {
+      "why_correct": "1.1 × 0.9 = 0.99, meaning 99% of original — a 1% net decrease.",
+      "why_wrong": {
+        "A": "Common trap: percentages are not symmetric. +10% then -10% ≠ 0.",
+        "C": "Increase would only happen if the decrease came first.",
+        "D": "2% is too large; the effect is exactly 1%."
+      },
+      "strategy_tip": "Successive % changes always compound multiplicatively. Test with 100 as a base number to see the exact effect."
+    },
+    "avg_time_seconds": 45,
+    "tags": ["percentages", "successive_changes"]
+  },
+  {
+    "id": "gmat_006",
+    "module": "gmat",
+    "subtype": "critical_reasoning",
+    "difficulty": "medium",
+    "topic": "assumption",
+    "question": "All employees who passed the aptitude test were promoted. Chidi was promoted. Therefore, Chidi passed the aptitude test. This argument is:",
+    "options": {"A": "Valid — the conclusion follows logically", "B": "Invalid — there could be other reasons for promotion", "C": "Valid — Chidi must have passed", "D": "Invalid — the premise is false"},
+    "correct": "B",
+    "explanation": "The argument commits the 'affirming the consequent' fallacy. Passing the test guarantees promotion, but promotion doesn't guarantee the test was passed — other paths to promotion may exist.",
+    "deep_explanation": {
+      "why_correct": "If A→B (pass→promote), knowing B (promoted) does NOT confirm A (passed). Other promotion paths may exist.",
+      "why_wrong": {
+        "A": "Seems logical but the conditional is one-directional only.",
+        "C": "We can only conclude test-passers get promoted, not the reverse.",
+        "D": "The premise may be true; the problem is the reasoning structure."
+      },
+      "strategy_tip": "Identify the logical structure: If P then Q. Q is true. Does P follow? NO — this is the affirming-the-consequent fallacy."
+    },
+    "avg_time_seconds": 55,
+    "tags": ["logical_fallacy", "conditional_reasoning"]
+  },
+  {
+    "id": "gmat_007",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "easy",
+    "topic": "geometry",
+    "question": "A rectangle has a length of 12cm and a perimeter of 40cm. What is its area?",
+    "options": {"A": "80 cm²", "B": "96 cm²", "C": "100 cm²", "D": "112 cm²"},
+    "correct": "B",
+    "explanation": "Perimeter = 2(l+w) = 40, so l+w = 20. Width = 20 - 12 = 8. Area = 12 × 8 = 96 cm².",
+    "deep_explanation": {
+      "why_correct": "Half the perimeter gives l+w. Subtract length to get width: 8. Area = 12×8 = 96.",
+      "why_wrong": {
+        "A": "80 = 8 × 10 — incorrect width calculation.",
+        "C": "100 = 10 × 10 — assumes square shape.",
+        "D": "112 uses wrong width of 9.33."
+      },
+      "strategy_tip": "For rectangles: Perimeter/2 = l+w. Know two out of three values to find the third."
+    },
+    "avg_time_seconds": 35,
+    "tags": ["geometry", "rectangles", "area"]
+  },
+  {
+    "id": "gmat_008",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "hard",
+    "topic": "probability",
+    "question": "A bag has 5 red and 3 blue balls. Two balls are drawn at random without replacement. What is the probability both are red?",
+    "options": {"A": "5/14", "B": "25/64", "C": "10/28", "D": "15/56"},
+    "correct": "A",
+    "explanation": "P = (5/8) × (4/7) = 20/56 = 5/14.",
+    "deep_explanation": {
+      "why_correct": "First draw P(red) = 5/8. Second draw (without replacement): P(red) = 4/7. Multiply: 20/56 = 5/14.",
+      "why_wrong": {
+        "B": "25/64 = (5/8)² — uses replacement probability incorrectly.",
+        "C": "10/28 = 5/14 in a different form — actually correct but A is the simplified form.",
+        "D": "15/56 uses wrong numerator."
+      },
+      "strategy_tip": "Without replacement: each draw changes the pool. Multiply conditional probabilities, adjusting denominator each time."
+    },
+    "avg_time_seconds": 70,
+    "tags": ["probability", "without_replacement"]
+  },
+  {
+    "id": "gmat_009",
+    "module": "gmat",
+    "subtype": "data_sufficiency",
+    "difficulty": "hard",
+    "topic": "data_sufficiency",
+    "question": "Is x > 0? Statement 1: x² = 4. Statement 2: x + 2 > 0.",
+    "options": {"A": "Statement 1 alone is sufficient", "B": "Statement 2 alone is sufficient", "C": "Both together are sufficient", "D": "Neither is sufficient"},
+    "correct": "C",
+    "explanation": "Stmt 1: x = ±2, not sufficient alone. Stmt 2: x > -2, not sufficient alone. Together: x = 2 or x = -2, and x > -2, so x = 2 > 0. Sufficient.",
+    "deep_explanation": {
+      "why_correct": "Each statement alone gives multiple possibilities. Together they narrow it to x = 2, which is positive.",
+      "why_wrong": {
+        "A": "x² = 4 gives x=2 or x=-2. Not definitive alone.",
+        "B": "x > -2 includes negative values like -1. Not sufficient.",
+        "D": "Wrong — combining both IS sufficient."
+      },
+      "strategy_tip": "Test each statement independently first. Only combine if neither works alone. Look for values that satisfy both constraints simultaneously."
+    },
+    "avg_time_seconds": 80,
+    "tags": ["data_sufficiency", "algebra"]
+  },
+  {
+    "id": "gmat_010",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "medium",
+    "topic": "speed_distance",
+    "question": "A car travels from City A to City B at 60 km/h and returns at 40 km/h. What is the average speed for the entire journey?",
+    "options": {"A": "50 km/h", "B": "48 km/h", "C": "52 km/h", "D": "45 km/h"},
+    "correct": "B",
+    "explanation": "Average speed = 2×v1×v2 / (v1+v2) = 2×60×40 / 100 = 4800/100 = 48 km/h.",
+    "deep_explanation": {
+      "why_correct": "For equal distances at different speeds, use the harmonic mean: 2v₁v₂/(v₁+v₂) = 48.",
+      "why_wrong": {
+        "A": "50 is the arithmetic mean — wrong for speed problems with equal distances.",
+        "C": "52 has no valid calculation basis.",
+        "D": "45 is incorrect; the true answer is 48."
+      },
+      "strategy_tip": "Average speed over equal distances = harmonic mean, NOT arithmetic mean. The slower speed pulls the average down more."
+    },
+    "avg_time_seconds": 50,
+    "tags": ["speed_distance", "average_speed", "harmonic_mean"]
+  },
+  {
+    "id": "gmat_011",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "easy",
+    "topic": "number_properties",
+    "question": "What is the sum of all integers from 1 to 100?",
+    "options": {"A": "4950", "B": "5000", "C": "5050", "D": "5100"},
+    "correct": "C",
+    "explanation": "Sum = n(n+1)/2 = 100 × 101 / 2 = 5050.",
+    "deep_explanation": {
+      "why_correct": "Gauss formula: pair 1+100=101, 2+99=101... 50 pairs × 101 = 5050.",
+      "why_wrong": {
+        "A": "4950 = 99×100/2 — sum from 1 to 99.",
+        "B": "5000 = 100×50 — common miscalculation.",
+        "D": "5100 = 100×51 — slight overcount."
+      },
+      "strategy_tip": "Memorize: Sum of 1 to n = n(n+1)/2. This appears frequently in aptitude tests."
+    },
+    "avg_time_seconds": 25,
+    "tags": ["number_series", "summation"]
+  },
+  {
+    "id": "gmat_012",
+    "module": "gmat",
+    "subtype": "critical_reasoning",
+    "difficulty": "hard",
+    "topic": "weakening_argument",
+    "question": "Company X reduced employee hours and productivity increased by 15%. The manager concluded shorter hours cause higher productivity. Which most weakens this conclusion?",
+    "options": {
+      "A": "Other companies with longer hours also saw productivity increases",
+      "B": "The company also introduced new software tools at the same time",
+      "C": "Employees reported higher job satisfaction",
+      "D": "The productivity increase was measured after one month"
+    },
+    "correct": "B",
+    "explanation": "If new software was introduced simultaneously, productivity could be attributed to that, not shorter hours — undermining the causal claim.",
+    "deep_explanation": {
+      "why_correct": "Introducing a confounding variable (new software) provides an alternative explanation for productivity gains.",
+      "why_wrong": {
+        "A": "Other companies' data strengthens rather than weakens the argument.",
+        "C": "Higher satisfaction could support shorter hours causing productivity.",
+        "D": "Time of measurement doesn't directly challenge the causal link."
+      },
+      "strategy_tip": "To weaken a causal argument, find an alternative cause (confounding variable) or show correlation ≠ causation."
+    },
+    "avg_time_seconds": 65,
+    "tags": ["causal_reasoning", "weakening", "confounding_variables"]
+  },
+  {
+    "id": "gmat_013",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "medium",
+    "topic": "mixtures",
+    "question": "A 40-litre solution is 25% acid. How many litres of pure acid must be added to make it 40% acid?",
+    "options": {"A": "8", "B": "10", "C": "12", "D": "15"},
+    "correct": "B",
+    "explanation": "Initial acid = 10L. Let x = acid added. (10+x)/(40+x) = 0.4 → 10+x = 16+0.4x → 0.6x = 6 → x = 10.",
+    "deep_explanation": {
+      "why_correct": "Set up equation: (current acid + added) / (total solution + added) = target %. Solve for x = 10.",
+      "why_wrong": {
+        "A": "8 litres gives ~33%, not 40%.",
+        "C": "12 litres gives ~42%, slightly over.",
+        "D": "15 is too large."
+      },
+      "strategy_tip": "Mixture equations: always track (acid quantity) / (total volume) = concentration. Set up the equation before computing."
+    },
+    "avg_time_seconds": 60,
+    "tags": ["mixtures", "concentration"]
+  },
+  {
+    "id": "gmat_014",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "easy",
+    "topic": "sequences",
+    "question": "What is the next number in the sequence: 2, 6, 18, 54, ___?",
+    "options": {"A": "108", "B": "162", "C": "216", "D": "72"},
+    "correct": "B",
+    "explanation": "Each term is multiplied by 3. 54 × 3 = 162.",
+    "deep_explanation": {
+      "why_correct": "Geometric sequence with ratio 3: 2×3=6, 6×3=18, 18×3=54, 54×3=162.",
+      "why_wrong": {
+        "A": "108 = 54 × 2 — uses ratio of 2, not 3.",
+        "C": "216 = 54 × 4 — overshoots the ratio.",
+        "D": "72 subtracts rather than multiplies."
+      },
+      "strategy_tip": "Always check both arithmetic (+/-) and geometric (×/÷) patterns. Find the common ratio or difference first."
+    },
+    "avg_time_seconds": 20,
+    "tags": ["sequences", "geometric_progression"]
+  },
+  {
+    "id": "gmat_015",
+    "module": "gmat",
+    "subtype": "quantitative",
+    "difficulty": "hard",
+    "topic": "permutation_combination",
+    "question": "In how many ways can 5 people be arranged in a row if 2 specific people must always be together?",
+    "options": {"A": "24", "B": "48", "C": "72", "D": "120"},
+    "correct": "B",
+    "explanation": "Treat the 2 as one unit: 4 units arranged in 4! = 24 ways. The 2 can switch positions = 24 × 2 = 48.",
+    "deep_explanation": {
+      "why_correct": "Glue the 2 together → 4 items to arrange = 4! = 24. Multiply by internal arrangements of the pair = 24×2 = 48.",
+      "why_wrong": {
+        "A": "24 = 4! — forgets the 2 internal arrangements of the pair.",
+        "C": "72 has no valid calculation path.",
+        "D": "120 = 5! — ignores the constraint entirely."
+      },
+      "strategy_tip": "For 'must be together' problems: glue them into one unit, arrange the units (n-1)!, then multiply by arrangements within the glued unit."
+    },
+    "avg_time_seconds": 75,
+    "tags": ["permutations", "combinations", "arrangement"]
+  }
+]

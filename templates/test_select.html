@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Take a Test{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Take a Test</h1>
+<p class="page-subtitle">Choose a module, configure your session, and start practising</p>
+
+<!-- Module Selection -->
+<div class="section-title mb-16">Select Module</div>
+<div class="module-grid" id="moduleGrid">
+  <div class="module-card" onclick="selectModule('gmat')">
+    <div class="module-icon gmat">📊</div>
+    <div class="module-name">GMAT-Style</div>
+    <div class="module-desc">Quantitative reasoning, critical reasoning, data sufficiency</div>
+    <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+      <span class="badge badge-accent">Quantitative</span>
+      <span class="badge badge-muted">Critical Reasoning</span>
+      <span class="badge badge-muted">Data Sufficiency</span>
+    </div>
+  </div>
+
+  <div class="module-card" onclick="selectModule('shl')">
+    <div class="module-icon shl">🔢</div>
+    <div class="module-name">SHL Assessment</div>
+    <div class="module-desc">Numerical, verbal, and inductive reasoning tests</div>
+    <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+      <span class="badge badge-success">Numerical</span>
+      <span class="badge badge-muted">Verbal</span>
+      <span class="badge badge-muted">Inductive</span>
+    </div>
+  </div>
+
+  <div class="module-card" onclick="selectModule('watson')">
+    <div class="module-icon watson">🧠</div>
+    <div class="module-name">Watson-Glaser</div>
+    <div class="module-desc">Critical thinking assessment used in law and corporate recruitment</div>
+    <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+      <span class="badge badge-warning">Inference</span>
+      <span class="badge badge-muted">Assumption</span>
+      <span class="badge badge-muted">Deduction</span>
+    </div>
+  </div>
+</div>
+
+<!-- Configuration Panel (hidden until module selected) -->
+<div id="configPanel" style="display:none; animation: fadeSlideIn 0.3s ease;">
+  <div class="card" style="max-width: 560px;">
+    <div class="section-title mb-16" id="configTitle">Configure Test</div>
+
+    <div class="form-group" id="subtypeGroup">
+      <label class="form-label">Sub-type (optional)</label>
+      <select class="form-input" id="subtypeSelect">
+        <option value="">All sub-types (mixed)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Difficulty</label>
+      <select class="form-input" id="difficultySelect">
+        <option value="all">All Difficulties</option>
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Number of Questions</label>
+      <select class="form-input" id="countSelect">
+        <option value="5">5 questions (~7 min)</option>
+        <option value="10">10 questions (~15 min)</option>
+        <option value="15" selected>15 questions (~22 min)</option>
+        <option value="20">20 questions (~30 min)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Mode</label>
+      <div style="display: flex; gap: 10px; margin-top: 4px;">
+        <label style="flex:1; cursor:pointer;">
+          <input type="radio" name="mode" value="timed" checked style="margin-right:6px;" />
+          <span style="font-size:14px;">⏱ Timed (90s/question)</span>
+        </label>
+        <label style="flex:1; cursor:pointer;">
+          <input type="radio" name="mode" value="study" style="margin-right:6px;" />
+          <span style="font-size:14px;">📖 Study Mode (no timer)</span>
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-top:8px;">
+      <button class="btn btn-secondary" onclick="resetConfig()">← Back</button>
+      <button class="btn btn-primary btn-lg" style="flex:1;" onclick="startTest()">
+        Start Test →
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Module sub-types config
+  const SUBTYPES = {
+    gmat: ['quantitative', 'critical_reasoning', 'data_sufficiency'],
+    shl: ['numerical', 'verbal', 'inductive'],
+    watson: ['inference', 'assumption', 'deduction', 'interpretation', 'evaluation']
+  };
+
+  let selectedModule = null;
+
+  // Check for URL param
+  const urlParams = new URLSearchParams(window.location.search);
+  const preModule = urlParams.get('module');
+  if (preModule) {
+    setTimeout(() => selectModule(preModule), 100);
+  }
+
+  function selectModule(mod) {
+    selectedModule = mod;
+    document.querySelectorAll('.module-card').forEach(c => c.classList.remove('selected'));
+    const cards = document.querySelectorAll('.module-card');
+    const modIndex = { gmat: 0, shl: 1, watson: 2 };
+    if (cards[modIndex[mod]]) cards[modIndex[mod]].classList.add('selected');
+
+    // Populate subtypes
+    const sel = document.getElementById('subtypeSelect');
+    sel.innerHTML = '<option value="">All sub-types (mixed)</option>';
+    (SUBTYPES[mod] || []).forEach(st => {
+      const label = st.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
+      sel.innerHTML += `<option value="${st}">${label}</option>`;
+    });
+
+    document.getElementById('configTitle').textContent = `Configure ${mod.toUpperCase()} Test`;
+    document.getElementById('configPanel').style.display = 'block';
+    document.getElementById('configPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function resetConfig() {
+    selectedModule = null;
+    document.getElementById('configPanel').style.display = 'none';
+    document.querySelectorAll('.module-card').forEach(c => c.classList.remove('selected'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async function startTest() {
+    if (!selectedModule) return;
+
+    const subtype = document.getElementById('subtypeSelect').value;
+    const difficulty = document.getElementById('difficultySelect').value;
+    const count = document.getElementById('countSelect').value;
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+
+    const btn = event.target;
+    btn.textContent = 'Starting...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/test/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ module: selectedModule, subtype, difficulty, count: parseInt(count), mode })
+      });
+      const data = await res.json();
+
+      if (data.session_id) {
+        window.location.href = `/test/${data.session_id}`;
+      } else {
+        showToast(data.error || 'Could not start test', 'error');
+        btn.textContent = 'Start Test →';
+        btn.disabled = false;
+      }
+    } catch (e) {
+      showToast('Connection error', 'error');
+      btn.textContent = 'Start Test →';
+      btn.disabled = false;
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,347 @@
+[
+  {
+    "id": "shl_num_001",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "easy",
+    "topic": "data_tables",
+    "question": "A company's Q1 revenue was ₦2.4M, Q2 was ₦3.0M, Q3 was ₦2.8M, Q4 was ₦3.6M. What was the average quarterly revenue?",
+    "options": {"A": "₦2.8M", "B": "₦2.95M", "C": "₦3.0M", "D": "₦3.2M"},
+    "correct": "C",
+    "explanation": "Total = 2.4+3.0+2.8+3.6 = 11.8M. Average = 11.8/4 = 2.95M.",
+    "deep_explanation": {
+      "why_correct": "Sum all values (11.8M) and divide by number of quarters (4) = 2.95M.",
+      "why_wrong": {
+        "A": "2.8M is Q3's value, not the average.",
+        "C": "3.0M is Q2's value — not the average.",
+        "D": "3.2M is too high."
+      },
+      "strategy_tip": "Average = Sum / Count. Always add all values before dividing. Double-check your addition."
+    },
+    "avg_time_seconds": 35,
+    "tags": ["averages", "data_tables"]
+  },
+  {
+    "id": "shl_num_002",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "medium",
+    "topic": "percentage_change",
+    "question": "Sales rose from ₦450,000 to ₦540,000. What is the percentage increase?",
+    "options": {"A": "16.7%", "B": "18%", "C": "20%", "D": "22%"},
+    "correct": "C",
+    "explanation": "% increase = (540,000 - 450,000)/450,000 × 100 = 90,000/450,000 × 100 = 20%.",
+    "deep_explanation": {
+      "why_correct": "Change = 90,000. % = 90,000/450,000 = 0.2 = 20%.",
+      "why_wrong": {
+        "A": "16.7% = 90,000/540,000 — divides by the new value, not original.",
+        "B": "18% is a calculation error.",
+        "D": "22% overstates the change."
+      },
+      "strategy_tip": "% change = (New - Old) / Old × 100. Always divide by the ORIGINAL value, never the new one."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["percentage_change", "sales_data"]
+  },
+  {
+    "id": "shl_num_003",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "medium",
+    "topic": "ratios",
+    "question": "A company spends its budget in ratio Marketing:Operations:HR = 4:3:1. If the HR budget is ₦500,000, what is the total budget?",
+    "options": {"A": "₦3,500,000", "B": "₦4,000,000", "C": "₦4,500,000", "D": "₦3,000,000"},
+    "correct": "B",
+    "explanation": "HR = 1 part = ₦500,000. Total parts = 4+3+1 = 8. Total = 8 × 500,000 = ₦4,000,000.",
+    "deep_explanation": {
+      "why_correct": "1 unit = 500,000. Total = 8 units × 500,000 = 4,000,000.",
+      "why_wrong": {
+        "A": "3,500,000 = 7 parts — misses counting all parts.",
+        "C": "4,500,000 counts 9 parts incorrectly.",
+        "D": "3,000,000 = 6 parts — wrong total."
+      },
+      "strategy_tip": "Find the value of one ratio unit (given part ÷ its ratio number), then multiply by total ratio sum."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["ratios", "budget_allocation"]
+  },
+  {
+    "id": "shl_num_004",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "hard",
+    "topic": "compound_interest",
+    "question": "₦200,000 is invested at 15% compound interest per annum. What is the value after 2 years?",
+    "options": {"A": "₦260,000", "B": "₦264,500", "C": "₦265,000", "D": "₦264,000"},
+    "correct": "B",
+    "explanation": "Year 1: 200,000 × 1.15 = 230,000. Year 2: 230,000 × 1.15 = 264,500.",
+    "deep_explanation": {
+      "why_correct": "Compound: A = P(1+r)ⁿ = 200,000 × 1.15² = 200,000 × 1.3225 = 264,500.",
+      "why_wrong": {
+        "A": "260,000 uses simple interest: 200,000 + 2×(200,000×0.15) = 260,000.",
+        "C": "265,000 is a rounding error.",
+        "D": "264,000 underestimates the compound growth."
+      },
+      "strategy_tip": "Compound interest: apply the rate repeatedly each year. Use A = P(1+r)ⁿ or chain multiply for accuracy."
+    },
+    "avg_time_seconds": 55,
+    "tags": ["compound_interest", "investment"]
+  },
+  {
+    "id": "shl_num_005",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "hard",
+    "topic": "data_interpretation",
+    "question": "A factory produces 800 units/day at 92% efficiency. How many units are defective per day?",
+    "options": {"A": "64", "B": "72", "C": "80", "D": "736"},
+    "correct": "A",
+    "explanation": "Defective rate = 100% - 92% = 8%. Defective units = 8% × 800 = 64.",
+    "deep_explanation": {
+      "why_correct": "Defective = (1 - efficiency) × total = 0.08 × 800 = 64.",
+      "why_wrong": {
+        "B": "72 uses a 9% defect rate.",
+        "C": "80 uses 10% defect rate.",
+        "D": "736 is the number of good units, not defective."
+      },
+      "strategy_tip": "Efficiency % tells you what's good. Defective = (100% - efficiency%) × total output."
+    },
+    "avg_time_seconds": 35,
+    "tags": ["efficiency", "percentages", "production"]
+  },
+  {
+    "id": "shl_verb_001",
+    "module": "shl",
+    "subtype": "verbal",
+    "difficulty": "easy",
+    "topic": "reading_comprehension",
+    "question": "Passage: 'The new procurement policy requires all vendors to submit bids electronically. Paper submissions will no longer be accepted after March 1st. This is to improve processing speed and reduce administrative costs.' Which statement is TRUE?",
+    "options": {
+      "A": "All vendors currently submit bids electronically",
+      "B": "Paper submissions are permanently banned immediately",
+      "C": "The policy change aims to reduce costs",
+      "D": "Administrative costs have already been reduced"
+    },
+    "correct": "C",
+    "explanation": "The passage explicitly states the purpose includes reducing administrative costs.",
+    "deep_explanation": {
+      "why_correct": "The passage states 'reduce administrative costs' as an explicit goal — directly supported by text.",
+      "why_wrong": {
+        "A": "The policy is future-requiring, implying not all do currently.",
+        "B": "The ban starts March 1st — not immediately and not stated as permanent.",
+        "D": "Costs haven't been reduced yet — the policy is forward-looking."
+      },
+      "strategy_tip": "In verbal reasoning, only select answers directly supported by the text. Avoid assumptions, inferences, or external knowledge."
+    },
+    "avg_time_seconds": 45,
+    "tags": ["reading_comprehension", "factual_recall"]
+  },
+  {
+    "id": "shl_verb_002",
+    "module": "shl",
+    "subtype": "verbal",
+    "difficulty": "medium",
+    "topic": "inference",
+    "question": "Passage: 'Teams that hold daily standup meetings report 23% fewer project delays. However, meetings exceeding 15 minutes correlate with lower team morale.' What can be inferred?",
+    "options": {
+      "A": "Daily standups should be eliminated",
+      "B": "Short daily standups are likely beneficial",
+      "C": "Long meetings improve project delivery",
+      "D": "Team morale doesn't affect project delays"
+    },
+    "correct": "B",
+    "explanation": "Short standups reduce delays (23% fewer). Keeping them under 15 minutes avoids the morale issue. Both facts together support short standups.",
+    "deep_explanation": {
+      "why_correct": "Combining both facts: standups reduce delays but should be kept short to protect morale.",
+      "why_wrong": {
+        "A": "Eliminating standups contradicts the 23% delay reduction benefit.",
+        "C": "The opposite — long meetings correlate with lower morale, not better delivery.",
+        "D": "Morale effects on delays are not addressed — cannot infer this."
+      },
+      "strategy_tip": "For inference questions, only conclude what MUST follow from combining the given facts — no leaps beyond the data."
+    },
+    "avg_time_seconds": 55,
+    "tags": ["inference", "passage_analysis"]
+  },
+  {
+    "id": "shl_verb_003",
+    "module": "shl",
+    "subtype": "verbal",
+    "difficulty": "medium",
+    "topic": "word_meaning",
+    "question": "Choose the word most similar in meaning to TENACIOUS:",
+    "options": {"A": "Fragile", "B": "Persistent", "C": "Arrogant", "D": "Indifferent"},
+    "correct": "B",
+    "explanation": "Tenacious means holding firmly to a purpose or position — closest synonym is persistent.",
+    "deep_explanation": {
+      "why_correct": "Tenacious = determined, not giving up easily. Persistent = continuing steadfastly. Strong match.",
+      "why_wrong": {
+        "A": "Fragile is the opposite — easily broken.",
+        "C": "Arrogant relates to pride, not determination.",
+        "D": "Indifferent means uncaring — opposite of tenacious."
+      },
+      "strategy_tip": "Break down unfamiliar words: 'tenaci-' relates to holding/gripping (like 'tenaculum'). Match the root meaning."
+    },
+    "avg_time_seconds": 25,
+    "tags": ["vocabulary", "synonyms"]
+  },
+  {
+    "id": "shl_ind_001",
+    "module": "shl",
+    "subtype": "inductive",
+    "difficulty": "easy",
+    "topic": "pattern_recognition",
+    "question": "Sequence: 3, 7, 15, 31, ___. What comes next?",
+    "options": {"A": "47", "B": "63", "C": "55", "D": "61"},
+    "correct": "B",
+    "explanation": "Pattern: each term = previous × 2 + 1. 3→7 (×2+1), 7→15 (×2+1), 15→31 (×2+1), 31→63 (×2+1).",
+    "deep_explanation": {
+      "why_correct": "Rule: multiply by 2 and add 1. 31 × 2 + 1 = 63.",
+      "why_wrong": {
+        "A": "47 = 31 + 16 — wrong pattern.",
+        "C": "55 = 31 + 24 — no consistent rule.",
+        "D": "61 = 31 × 2 - 1 — close but uses subtraction."
+      },
+      "strategy_tip": "Check multiple operations: differences, ratios, and combined operations. Test your rule on ALL previous terms before committing."
+    },
+    "avg_time_seconds": 45,
+    "tags": ["number_patterns", "sequences"]
+  },
+  {
+    "id": "shl_ind_002",
+    "module": "shl",
+    "subtype": "inductive",
+    "difficulty": "medium",
+    "topic": "pattern_recognition",
+    "question": "Series: 2, 3, 5, 8, 13, 21, ___. What comes next?",
+    "options": {"A": "29", "B": "34", "C": "33", "D": "31"},
+    "correct": "B",
+    "explanation": "Fibonacci sequence: each term = sum of previous two. 13+21 = 34.",
+    "deep_explanation": {
+      "why_correct": "2+3=5, 3+5=8, 5+8=13, 8+13=21, 13+21=34. Classic Fibonacci.",
+      "why_wrong": {
+        "A": "29 = 21 + 8 — skips one position.",
+        "C": "33 = 21 + 12 — wrong second term.",
+        "D": "31 has no pattern basis."
+      },
+      "strategy_tip": "Always check if each term depends on the previous TWO terms (Fibonacci-type). This pattern appears frequently in SHL tests."
+    },
+    "avg_time_seconds": 30,
+    "tags": ["fibonacci", "sequences", "pattern"]
+  },
+  {
+    "id": "shl_ind_003",
+    "module": "shl",
+    "subtype": "inductive",
+    "difficulty": "hard",
+    "topic": "logical_rules",
+    "question": "If all Bloops are Razzles, all Razzles are Lazzles, then: All Bloops are definitely:",
+    "options": {"A": "Razzles only", "B": "Lazzles", "C": "Neither Razzles nor Lazzles", "D": "Lazzles but not Razzles"},
+    "correct": "B",
+    "explanation": "Bloops → Razzles → Lazzles. By transitivity, all Bloops are Lazzles (and also Razzles).",
+    "deep_explanation": {
+      "why_correct": "Logical chain: B⊆R and R⊆L, therefore B⊆L. All Bloops are Lazzles.",
+      "why_wrong": {
+        "A": "They are Razzles too, but the question asks what they DEFINITELY are — Lazzles follows from transitivity.",
+        "C": "Wrong — the chain clearly includes them.",
+        "D": "They are Razzles (by first premise) — this contradicts the first statement."
+      },
+      "strategy_tip": "Draw Venn diagrams mentally: B inside R inside L. Anything in B must also be in L."
+    },
+    "avg_time_seconds": 50,
+    "tags": ["logical_deduction", "syllogism", "set_theory"]
+  },
+  {
+    "id": "shl_num_006",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "medium",
+    "topic": "profit_loss",
+    "question": "A trader buys goods for ₦80,000 and sells for ₦96,000. What is the profit percentage?",
+    "options": {"A": "16.7%", "B": "20%", "C": "25%", "D": "18%"},
+    "correct": "B",
+    "explanation": "Profit = 96,000 - 80,000 = 16,000. Profit% = 16,000/80,000 × 100 = 20%.",
+    "deep_explanation": {
+      "why_correct": "Profit % is always on cost price (buying price). 16,000/80,000 = 0.2 = 20%.",
+      "why_wrong": {
+        "A": "16.7% = 16,000/96,000 — divides by selling price, not cost price.",
+        "C": "25% overstates the profit margin.",
+        "D": "18% is a calculation error."
+      },
+      "strategy_tip": "Profit % = Profit ÷ Cost Price × 100. ALWAYS on cost price unless told otherwise."
+    },
+    "avg_time_seconds": 35,
+    "tags": ["profit_loss", "percentage"]
+  },
+  {
+    "id": "shl_verb_004",
+    "module": "shl",
+    "subtype": "verbal",
+    "difficulty": "hard",
+    "topic": "critical_evaluation",
+    "question": "Statement: 'Remote work reduces productivity because employees are not monitored.' This argument is:",
+    "options": {
+      "A": "Strong — monitoring is essential for productivity",
+      "B": "Weak — it assumes monitoring is the only productivity driver",
+      "C": "Strong — remote workers consistently underperform",
+      "D": "Weak — the statement is factually incorrect"
+    },
+    "correct": "B",
+    "explanation": "The argument assumes monitoring = productivity. Many productive remote workers are self-directed. The premise oversimplifies cause and effect.",
+    "deep_explanation": {
+      "why_correct": "The argument is weak because it conflates lack of monitoring with lack of productivity — an unproven assumption.",
+      "why_wrong": {
+        "A": "Monitoring may help some but isn't universally essential.",
+        "C": "Remote workers don't consistently underperform — this is an unsupported claim.",
+        "D": "The argument may not be factually incorrect in all cases — the weakness is the logical leap, not factual error."
+      },
+      "strategy_tip": "Evaluate argument strength by testing its premises. Ask: 'Does the reason NECESSARILY lead to the conclusion?'"
+    },
+    "avg_time_seconds": 60,
+    "tags": ["argument_evaluation", "critical_thinking"]
+  },
+  {
+    "id": "shl_ind_004",
+    "module": "shl",
+    "subtype": "inductive",
+    "difficulty": "easy",
+    "topic": "odd_one_out",
+    "question": "Which is the odd one out: 16, 25, 36, 48, 64?",
+    "options": {"A": "16", "B": "25", "C": "48", "D": "64"},
+    "correct": "C",
+    "explanation": "16=4², 25=5², 36=6², 64=8² are all perfect squares. 48 is not a perfect square.",
+    "deep_explanation": {
+      "why_correct": "48 cannot be expressed as n² for any integer n. All others are perfect squares.",
+      "why_wrong": {
+        "A": "16 = 4² — valid perfect square.",
+        "B": "25 = 5² — valid perfect square.",
+        "D": "64 = 8² — valid perfect square."
+      },
+      "strategy_tip": "For odd-one-out, identify the COMMON property among most items, then find which one lacks it."
+    },
+    "avg_time_seconds": 30,
+    "tags": ["odd_one_out", "perfect_squares", "number_properties"]
+  },
+  {
+    "id": "shl_num_007",
+    "module": "shl",
+    "subtype": "numerical",
+    "difficulty": "hard",
+    "topic": "data_interpretation",
+    "question": "A project has a budget of ₦5M. After spending 35% in Month 1 and 28% in Month 2, what amount (₦M) remains?",
+    "options": {"A": "₦1.85M", "B": "₦1.75M", "C": "₦2.0M", "D": "₦1.65M"},
+    "correct": "A",
+    "explanation": "Spent: 35% + 28% = 63%. Remaining = 37%. 37% × 5M = ₦1.85M.",
+    "deep_explanation": {
+      "why_correct": "Total spent = 63%. Remaining = 37%. 0.37 × 5,000,000 = 1,850,000 = ₦1.85M.",
+      "why_wrong": {
+        "B": "1.75M = 35% of 5M — only counts Month 1.",
+        "C": "2.0M = 40% remaining — wrong percentage.",
+        "D": "1.65M = 33% remaining — arithmetic error."
+      },
+      "strategy_tip": "Always combine all expenditures first, then compute what's left. Remaining % = 100% - total spent %."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["budgets", "percentage", "data_interpretation"]
+  }
+]

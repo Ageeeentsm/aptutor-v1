@@ -1,0 +1,210 @@
+{
+  "levels": [
+    {
+      "id": "level_1",
+      "title": "Foundation",
+      "subtitle": "Start here if you're new",
+      "icon": "🌱",
+      "color": "success",
+      "lessons": [
+        {
+          "id": "l1_percentages",
+          "title": "Percentages from Zero",
+          "duration": "8 min",
+          "topics": ["What is a percentage?", "Finding % of a number", "% increase & decrease", "Reverse percentages"],
+          "illustration": "percentage_diagram",
+          "key_formula": "% = (Part ÷ Whole) × 100",
+          "example": "20% of ₦500 = 0.20 × 500 = ₦100",
+          "mnemonic": "POWO: Part Over Whole × 100",
+          "practice_topics": ["percentages"]
+        },
+        {
+          "id": "l1_ratios",
+          "title": "Ratios & Sharing",
+          "duration": "7 min",
+          "topics": ["What is a ratio?", "Simplifying ratios", "Sharing in a ratio", "Ratio word problems"],
+          "illustration": "ratio_bar",
+          "key_formula": "1 unit = Total ÷ Sum of parts",
+          "example": "₦900 in ratio 2:1 → 3 parts, 1 unit = ₦300, shares = ₦600 & ₦300",
+          "mnemonic": "STEP: Sum Total, Equal Parts",
+          "practice_topics": ["ratios"]
+        },
+        {
+          "id": "l1_sequences",
+          "title": "Number Patterns & Sequences",
+          "duration": "6 min",
+          "topics": ["Arithmetic sequences", "Geometric sequences", "Fibonacci patterns", "Finding the rule"],
+          "illustration": "sequence_arrows",
+          "key_formula": "Arithmetic: add constant. Geometric: multiply constant",
+          "example": "2, 6, 18, 54... → multiply by 3 each time",
+          "mnemonic": "ADD or MULTIPLY — check both!",
+          "practice_topics": ["sequences"]
+        },
+        {
+          "id": "l1_algebra",
+          "title": "Basic Algebra",
+          "duration": "8 min",
+          "topics": ["Solving for x", "Word problems to equations", "Substitution", "Simultaneous equations intro"],
+          "illustration": "balance_scale",
+          "key_formula": "Whatever you do to one side, do to the other",
+          "example": "3x + 7 = 22 → 3x = 15 → x = 5",
+          "mnemonic": "BALANCE: keep both sides equal always",
+          "practice_topics": ["algebra"]
+        }
+      ]
+    },
+    {
+      "id": "level_2",
+      "title": "Building Up",
+      "subtitle": "Core exam topics",
+      "icon": "📈",
+      "color": "accent",
+      "lessons": [
+        {
+          "id": "l2_speed_distance",
+          "title": "Speed, Distance & Time",
+          "duration": "9 min",
+          "topics": ["The SDT triangle", "Average speed trap", "Relative speed", "Journey problems"],
+          "illustration": "sdt_triangle",
+          "key_formula": "Speed = Distance ÷ Time (SDT triangle)",
+          "example": "Average speed A→B→A at 60 & 40 km/h = 2×60×40÷(60+40) = 48 km/h",
+          "mnemonic": "SDT Triangle: cover what you want to find",
+          "practice_topics": ["speed_distance"]
+        },
+        {
+          "id": "l2_probability",
+          "title": "Probability",
+          "duration": "10 min",
+          "topics": ["Basic probability", "AND vs OR rules", "With vs without replacement", "Tree diagrams"],
+          "illustration": "probability_tree",
+          "key_formula": "P = Favourable ÷ Total. AND = multiply. OR = add",
+          "example": "P(both red, no replacement) = 5/8 × 4/7 = 5/14",
+          "mnemonic": "AND = multiply down. OR = add across",
+          "practice_topics": ["probability"]
+        },
+        {
+          "id": "l2_work_rate",
+          "title": "Work Rate & Pipes",
+          "duration": "8 min",
+          "topics": ["Rate = 1/time", "Combined rates", "Pipe problems", "Partial work"],
+          "illustration": "pipe_diagram",
+          "key_formula": "Combined rate = 1/t₁ + 1/t₂",
+          "example": "Pipe A in 6h, Pipe B in 4h together: 1/6 + 1/4 = 5/12 → fills in 2.4h",
+          "mnemonic": "RATES ADD, not times",
+          "practice_topics": ["work_rate"]
+        },
+        {
+          "id": "l2_watson_basics",
+          "title": "Watson-Glaser: Inference",
+          "duration": "10 min",
+          "topics": ["The 5-point scale", "True vs Probably True", "Insufficient Data", "Staying within the text"],
+          "illustration": "inference_scale",
+          "key_formula": "TRUE → PROB TRUE → INSUFF DATA → PROB FALSE → FALSE",
+          "example": "Revenue up, profit down → costs probably rose (Probably True, not True)",
+          "mnemonic": "ONLY what the text says. NO outside knowledge.",
+          "practice_topics": ["inference"]
+        }
+      ]
+    },
+    {
+      "id": "level_3",
+      "title": "Exam Ready",
+      "subtitle": "Advanced techniques",
+      "icon": "🏆",
+      "color": "warning",
+      "lessons": [
+        {
+          "id": "l3_data_sufficiency",
+          "title": "GMAT Data Sufficiency",
+          "duration": "12 min",
+          "topics": ["The 5 answer choices", "Testing each statement alone", "Combining statements", "Common traps"],
+          "illustration": "ds_flowchart",
+          "key_formula": "Test Stmt 1 alone → Stmt 2 alone → Both together",
+          "example": "Is x > 0? S1: x²=4 (x=±2, not enough). S2: x+2>0 (x>-2, not enough). Together: x=2. Answer: C",
+          "mnemonic": "1-2-C-E-D: the DS answer order to always check",
+          "practice_topics": ["data_sufficiency"]
+        },
+        {
+          "id": "l3_critical_reasoning",
+          "title": "Critical Reasoning",
+          "duration": "11 min",
+          "topics": ["Strengthen vs Weaken", "Finding assumptions", "Causal fallacies", "Confounding variables"],
+          "illustration": "argument_diagram",
+          "key_formula": "Weaken = alternative cause or reverse causation",
+          "example": "To weaken 'X causes Y': show Z causes Y, or Y causes X",
+          "mnemonic": "ATACC: Assumption, Then Alternative Cause, Counter",
+          "practice_topics": ["assumption", "weakening_argument"]
+        },
+        {
+          "id": "l3_mixtures",
+          "title": "Mixtures & Alligation",
+          "duration": "9 min",
+          "topics": ["Mixture equations", "Concentration problems", "Alligation method", "Weighted averages"],
+          "illustration": "mixture_diagram",
+          "key_formula": "Substance quantity stays constant when you add solvent",
+          "example": "40L at 25% acid + xL water = 30% acid → 10/(40+x)=0.3 → x=13.3L",
+          "mnemonic": "SUBSTANCE stays, TOTAL grows",
+          "practice_topics": ["mixtures"]
+        },
+        {
+          "id": "l3_watson_advanced",
+          "title": "Watson-Glaser: Arguments",
+          "duration": "10 min",
+          "topics": ["Strong vs weak arguments", "Anecdotal fallacy", "Relevance test", "Policy questions"],
+          "illustration": "argument_strength",
+          "key_formula": "Strong = relevant + logical reason. Weak = emotional/anecdotal/irrelevant",
+          "example": "'My uncle's business failed' = weak anecdotal argument against minimum wage",
+          "mnemonic": "RLR: Relevant, Logical, Reason-based = Strong",
+          "practice_topics": ["evaluation", "assumption"]
+        }
+      ]
+    }
+  ],
+  "daily_lectures": [
+    {
+      "id": "dl_001",
+      "title": "The Percentage Trap",
+      "hook": "Why 50% off then 50% on does NOT get you back to the original price",
+      "read_time": "3 min",
+      "content": "Most students think +10% then -10% = 0%. Wrong. It equals -1%. Here's why:\n\nIf your salary is ₦100,000:\n→ +10% = ₦110,000\n→ -10% of ₦110,000 = ₦99,000\n\nYou lost ₦1,000! This is because the second percentage applies to a DIFFERENT base.\n\nThe formula: (1 + r₁) × (1 - r₂) - 1 = net change\n(1.10) × (0.90) - 1 = 0.99 - 1 = -0.01 = -1%\n\n⚡ EXAM TIP: Never add percentages. Always multiply.",
+      "quiz_question": "gmat_005",
+      "tags": ["percentages", "common_mistakes"]
+    },
+    {
+      "id": "dl_002",
+      "title": "Why Rates Add, Not Times",
+      "hook": "The single most common mistake in pipe and work problems",
+      "read_time": "4 min",
+      "content": "Student mistake: 'Pipe A takes 6h, Pipe B takes 4h, together they take 5h (average).'\n\nThis is WRONG. Here's why:\n\nPipe A fills 1/6 of the tank per hour.\nPipe B fills 1/4 of the tank per hour.\nTogether: 1/6 + 1/4 = 2/12 + 3/12 = 5/12 per hour.\nTime = 12/5 = 2.4 hours.\n\nRATES add. TIMES do not.\n\n⚡ MNEMONIC: Think of them as workers earning money per hour — two workers together earn the sum of their rates.",
+      "quiz_question": "gmat_004",
+      "tags": ["work_rate", "common_mistakes"]
+    },
+    {
+      "id": "dl_003",
+      "title": "Average Speed Is Never the Arithmetic Mean",
+      "hook": "The harmonic mean — why your commute average isn't what you think",
+      "read_time": "3 min",
+      "content": "If you drive Lagos to Ibadan at 60 km/h and return at 40 km/h, your average speed is NOT 50 km/h.\n\nWhy? You spend MORE time at the slower speed, so it drags the average down.\n\nFormula: Average speed = 2×v₁×v₂ ÷ (v₁+v₂)\n= 2×60×40 ÷ 100 = 4800÷100 = 48 km/h\n\nThis is called the HARMONIC MEAN.\n\n⚡ TRICK: The harmonic mean is always LESS than the arithmetic mean for two different speeds.",
+      "quiz_question": "gmat_009",
+      "tags": ["speed_distance", "harmonic_mean"]
+    },
+    {
+      "id": "dl_004",
+      "title": "Watson-Glaser: The Golden Rule",
+      "hook": "One rule that unlocks 80% of Watson-Glaser questions",
+      "read_time": "3 min",
+      "content": "THE RULE: Only accept conclusions that MUST follow from the given information. Nothing more.\n\nDo NOT use:\n❌ Your general knowledge\n❌ Common sense assumptions\n❌ 'Probably' or 'usually'\n\nOnly use:\n✅ What the passage explicitly states\n✅ What MUST logically follow\n\nExample: 'Revenue grew 40%, profit fell 5%'\nCan we conclude: costs rose? → PROBABLY TRUE (not certain — could be tax)\nCan we conclude: the company is failing? → INSUFFICIENT DATA\n\n⚡ When in doubt → choose Insufficient Data",
+      "quiz_question": "wg_inf_001",
+      "tags": ["watson_glaser", "inference"]
+    },
+    {
+      "id": "dl_005",
+      "title": "The Elimination Method",
+      "hook": "How to score 70% accuracy even on questions you don't know",
+      "read_time": "3 min",
+      "content": "Smart test-takers don't just answer — they eliminate.\n\nSTEP 1: Read the question and identify what TYPE of answer you need (a number? a direction? a logical conclusion?)\n\nSTEP 2: Immediately rule out any option that:\n- Is the wrong type (e.g., negative when you need positive)\n- Is impossibly large or small\n- Contradicts the question data\n\nSTEP 3: From the remaining 2, apply your formula or logic.\n\nExample: 'Average speed' question → eliminate arithmetic mean options immediately (always wrong for this type).\n\n⚡ On a 4-option question, eliminating 2 wrong ones gives you 50/50 odds minimum.",
+      "quiz_question": null,
+      "tags": ["exam_strategy", "elimination"]
+    }
+  ]
+}

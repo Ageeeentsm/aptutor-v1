@@ -1,0 +1,319 @@
+[
+  {
+    "id": "wg_inf_001",
+    "module": "watson",
+    "subtype": "inference",
+    "difficulty": "medium",
+    "topic": "inference",
+    "question": "Statement: 'The company's revenue grew by 40% last year, but net profit declined by 5%.'\n\nInference: The company's costs increased significantly last year.",
+    "options": {
+      "A": "True — the inference definitely follows",
+      "B": "Probably True — likely but not certain",
+      "C": "Insufficient Data — cannot determine",
+      "D": "Probably False — unlikely",
+      "E": "False — definitely does not follow"
+    },
+    "correct": "B",
+    "explanation": "Revenue up 40% but profit down 5% strongly suggests costs rose faster than revenue. This is probably true, but other explanations (tax, write-offs) are possible.",
+    "deep_explanation": {
+      "why_correct": "The data pattern (high revenue growth + profit decline) is most consistent with rising costs — probably true.",
+      "why_wrong": {
+        "A": "We can't be CERTAIN — there may be other factors like increased depreciation.",
+        "C": "We have strong circumstantial evidence — not truly insufficient.",
+        "D": "Cost increases is the most logical explanation given the data.",
+        "E": "Definitely false would require proof of no cost increase — we have no such proof."
+      },
+      "strategy_tip": "Watson-Glaser inference scale: True > Probably True > Insufficient Data > Probably False > False. Use 'Probably True' when evidence strongly suggests but doesn't prove."
+    },
+    "avg_time_seconds": 55,
+    "tags": ["inference", "financial_data"]
+  },
+  {
+    "id": "wg_inf_002",
+    "module": "watson",
+    "subtype": "inference",
+    "difficulty": "easy",
+    "topic": "inference",
+    "question": "Statement: 'All 50 students who took the exam passed. Amaka took the exam.'\n\nInference: Amaka passed the exam.",
+    "options": {
+      "A": "True — definitely follows",
+      "B": "Probably True",
+      "C": "Insufficient Data",
+      "D": "Probably False",
+      "E": "False — definitely does not follow"
+    },
+    "correct": "A",
+    "explanation": "If ALL 50 students passed and Amaka was one of them, she MUST have passed. This is logically certain.",
+    "deep_explanation": {
+      "why_correct": "Universal statement + specific membership = logical certainty. All → Amaka is included → Amaka passed.",
+      "why_wrong": {
+        "B": "No uncertainty here — the premise is absolute ('all').",
+        "C": "We have complete information to draw the conclusion.",
+        "D": "Would require evidence she didn't pass — none given.",
+        "E": "Directly contradicts the universal premise."
+      },
+      "strategy_tip": "When a universal statement ('all', 'every', 'none') applies to a specific case, the inference about that case is certain."
+    },
+    "avg_time_seconds": 30,
+    "tags": ["inference", "deductive_reasoning"]
+  },
+  {
+    "id": "wg_assum_001",
+    "module": "watson",
+    "subtype": "assumption",
+    "difficulty": "medium",
+    "topic": "assumption",
+    "question": "Statement: 'We should hire more customer service staff to improve customer satisfaction scores.'\n\nAssumption: More staff will improve the quality of customer interactions.",
+    "options": {
+      "A": "Assumption is made — it is embedded in the argument",
+      "B": "Assumption is not made — it does not underlie the statement"
+    },
+    "correct": "A",
+    "explanation": "The argument assumes that having MORE staff leads to BETTER interactions — this is an unstated but necessary premise.",
+    "deep_explanation": {
+      "why_correct": "The statement only says 'more staff → better scores,' implying quality improves with quantity — an assumed relationship.",
+      "why_wrong": {
+        "B": "The statement would make no sense without this assumption. It's central to the reasoning."
+      },
+      "strategy_tip": "An assumption is UNSTATED but NECESSARY for the argument to hold. Ask: 'Would the conclusion collapse if this weren't true?'"
+    },
+    "avg_time_seconds": 45,
+    "tags": ["assumption", "HR_decisions"]
+  },
+  {
+    "id": "wg_assum_002",
+    "module": "watson",
+    "subtype": "assumption",
+    "difficulty": "hard",
+    "topic": "assumption",
+    "question": "Statement: 'Since Taiwo scored highest in the aptitude test, she should lead the project team.'\n\nAssumption: Aptitude test scores are a reliable indicator of leadership ability.",
+    "options": {
+      "A": "Assumption is made",
+      "B": "Assumption is not made"
+    },
+    "correct": "A",
+    "explanation": "The argument directly links test performance to leadership suitability — this connection is an unstated assumption.",
+    "deep_explanation": {
+      "why_correct": "Without this assumption, the highest test score would have no bearing on leading a team. The argument requires this link.",
+      "why_wrong": {
+        "B": "If aptitude scores didn't predict leadership, the recommendation would be baseless."
+      },
+      "strategy_tip": "Bridge assumptions connect the reason to the conclusion. Identify what must be true for the reason to support the conclusion."
+    },
+    "avg_time_seconds": 50,
+    "tags": ["assumption", "leadership", "bridge_assumption"]
+  },
+  {
+    "id": "wg_deduct_001",
+    "module": "watson",
+    "subtype": "deduction",
+    "difficulty": "easy",
+    "topic": "deduction",
+    "question": "Premises: 'All managers attend the weekly briefing. Some managers work remotely.'\n\nConclusion: Some people who work remotely attend the weekly briefing.",
+    "options": {
+      "A": "Conclusion follows — logically valid",
+      "B": "Conclusion does not follow — logically invalid"
+    },
+    "correct": "A",
+    "explanation": "Since ALL managers attend briefings, and SOME managers work remotely, those remote managers attend briefings. Some remote workers = remote managers = briefing attendees.",
+    "deep_explanation": {
+      "why_correct": "The remote managers satisfy both conditions: they work remotely AND attend briefings. Conclusion follows.",
+      "why_wrong": {
+        "B": "The logic chain is valid — cannot say the conclusion doesn't follow."
+      },
+      "strategy_tip": "Use Venn diagrams: Remote Workers ∩ Managers ≠ ∅ (some overlap). That overlap must attend briefings."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["deduction", "syllogism", "venn_diagrams"]
+  },
+  {
+    "id": "wg_deduct_002",
+    "module": "watson",
+    "subtype": "deduction",
+    "difficulty": "hard",
+    "topic": "deduction",
+    "question": "Premises: 'No efficient process wastes time. Some digital processes are not efficient.'\n\nConclusion: Some digital processes waste time.",
+    "options": {
+      "A": "Conclusion follows",
+      "B": "Conclusion does not follow"
+    },
+    "correct": "A",
+    "explanation": "Inefficient processes can waste time (contrapositive of premise 1). Some digital processes are inefficient. Therefore some digital processes can waste time.",
+    "deep_explanation": {
+      "why_correct": "P1 contrapositive: wastes time → not efficient. Some digital = not efficient → can waste time. Conclusion follows.",
+      "why_wrong": {
+        "B": "The logical chain is valid. Denying it would require all digital processes to be efficient."
+      },
+      "strategy_tip": "Use contrapositives: 'No A is B' means 'All B are non-A'. Then apply to specific cases."
+    },
+    "avg_time_seconds": 65,
+    "tags": ["deduction", "contrapositive", "logical_chain"]
+  },
+  {
+    "id": "wg_interp_001",
+    "module": "watson",
+    "subtype": "interpretation",
+    "difficulty": "medium",
+    "topic": "interpretation",
+    "question": "Data: A survey of 500 employees shows 72% prefer hybrid work. 85% of those under 35 prefer hybrid vs 58% of those 35+.\n\nConclusion: Younger employees are more likely to prefer hybrid work than older employees.",
+    "options": {
+      "A": "Conclusion follows — supported by data",
+      "B": "Conclusion does not follow — not supported"
+    },
+    "correct": "A",
+    "explanation": "85% (under 35) vs 58% (35+) directly shows younger employees prefer hybrid at a higher rate.",
+    "deep_explanation": {
+      "why_correct": "The data explicitly shows a higher preference rate (85%) for the younger group versus the older group (58%).",
+      "why_wrong": {
+        "B": "The data directly supports the conclusion — denying it ignores the clear percentage difference."
+      },
+      "strategy_tip": "For interpretation, stay within the data. The conclusion must be directly inferable — no external assumptions needed."
+    },
+    "avg_time_seconds": 45,
+    "tags": ["interpretation", "survey_data", "demographics"]
+  },
+  {
+    "id": "wg_interp_002",
+    "module": "watson",
+    "subtype": "interpretation",
+    "difficulty": "hard",
+    "topic": "interpretation",
+    "question": "Data: A study shows students who eat breakfast score 12% higher on tests than those who skip it.\n\nConclusion: Eating breakfast causes higher test performance.",
+    "options": {
+      "A": "Conclusion follows",
+      "B": "Conclusion does not follow"
+    },
+    "correct": "B",
+    "explanation": "The data shows correlation, not causation. A confounding variable (e.g., family income affecting both breakfast habits and academic support) could explain both.",
+    "deep_explanation": {
+      "why_correct": "Correlation ≠ causation. The study shows association — not that breakfast CAUSES the improvement.",
+      "why_wrong": {
+        "A": "Jumping to causation from correlation is a logical error not supported by the data alone."
+      },
+      "strategy_tip": "Always distinguish correlation from causation. When data shows a statistical relationship, the conclusion should say 'associated with' not 'causes'."
+    },
+    "avg_time_seconds": 60,
+    "tags": ["interpretation", "correlation_causation", "research_data"]
+  },
+  {
+    "id": "wg_eval_001",
+    "module": "watson",
+    "subtype": "evaluation",
+    "difficulty": "medium",
+    "topic": "argument_evaluation",
+    "question": "Issue: Should Nigerian companies be required to publish annual diversity reports?\n\nArgument FOR: 'Yes, transparency forces accountability and encourages companies to improve their diversity practices.'",
+    "options": {
+      "A": "Strong argument — directly addresses the issue with a logical reason",
+      "B": "Weak argument — does not directly address the issue"
+    },
+    "correct": "A",
+    "explanation": "The argument provides a clear causal mechanism (transparency → accountability → improvement) that directly supports the proposal.",
+    "deep_explanation": {
+      "why_correct": "Strong arguments: (1) are relevant to the issue, (2) provide a logical reason, (3) aren't based on personal opinion alone. This argument meets all three.",
+      "why_wrong": {
+        "B": "The argument is directly relevant and logically structured — cannot reasonably be called weak."
+      },
+      "strategy_tip": "Strong arguments are those with logical, relevant reasoning. Weak ones are irrelevant, circular, or based purely on emotion."
+    },
+    "avg_time_seconds": 50,
+    "tags": ["argument_evaluation", "business_policy"]
+  },
+  {
+    "id": "wg_eval_002",
+    "module": "watson",
+    "subtype": "evaluation",
+    "difficulty": "hard",
+    "topic": "argument_evaluation",
+    "question": "Issue: Should the minimum wage be increased?\n\nArgument AGAINST: 'No, because my uncle's small business struggled when wages were raised.'",
+    "options": {
+      "A": "Strong argument",
+      "B": "Weak argument — anecdotal and not generalizable"
+    },
+    "correct": "B",
+    "explanation": "One personal anecdote cannot justify a national policy position. This is anecdotal evidence — logically weak.",
+    "deep_explanation": {
+      "why_correct": "The argument relies on a single personal example to make a broad claim — the classic anecdotal fallacy.",
+      "why_wrong": {
+        "A": "Strong arguments require evidence applicable to the general case, not one personal story."
+      },
+      "strategy_tip": "Dismiss arguments that use one specific example to oppose a broad policy. Look for arguments with systematic evidence or logical principles."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["argument_evaluation", "anecdotal_fallacy", "policy"]
+  },
+  {
+    "id": "wg_inf_003",
+    "module": "watson",
+    "subtype": "inference",
+    "difficulty": "hard",
+    "topic": "inference",
+    "question": "Statement: 'A pharmaceutical company spent ₦2B on R&D last year but released no new products.'\n\nInference: The company's R&D investment was wasted.",
+    "options": {
+      "A": "True",
+      "B": "Probably True",
+      "C": "Insufficient Data",
+      "D": "Probably False",
+      "E": "False"
+    },
+    "correct": "C",
+    "explanation": "R&D often takes years before yielding products. The investment may still lead to future products — we cannot conclude it was wasted without more context.",
+    "deep_explanation": {
+      "why_correct": "R&D cycles are long. No products this year doesn't mean no value — trials, patents, and knowledge accumulate.",
+      "why_wrong": {
+        "A": "We'd need to know the full R&D pipeline, not just one year's output.",
+        "B": "Still assumes too much about 'waste' without process information.",
+        "D": "The investment might have been genuinely unproductive — we don't know.",
+        "E": "Too definitive — there may be valid concerns about the investment."
+      },
+      "strategy_tip": "Use 'Insufficient Data' when the statement could be true OR false and the data doesn't distinguish between them."
+    },
+    "avg_time_seconds": 55,
+    "tags": ["inference", "business", "R&D"]
+  },
+  {
+    "id": "wg_assum_003",
+    "module": "watson",
+    "subtype": "assumption",
+    "difficulty": "easy",
+    "topic": "assumption",
+    "question": "Statement: 'Children should learn coding in primary school to prepare for future careers.'\n\nAssumption: Coding skills will remain relevant to future careers.",
+    "options": {
+      "A": "Assumption is made",
+      "B": "Assumption is not made"
+    },
+    "correct": "A",
+    "explanation": "Recommending coding for 'future careers' only makes sense if coding will be a future skill requirement — an unstated but necessary assumption.",
+    "deep_explanation": {
+      "why_correct": "If coding became irrelevant, the recommendation would collapse. The argument silently requires coding to stay relevant.",
+      "why_wrong": {
+        "B": "Without this assumption, teaching coding for future career preparation has no logical basis."
+      },
+      "strategy_tip": "Future-oriented arguments always assume the future conditions match present expectations — identify these temporal assumptions."
+    },
+    "avg_time_seconds": 35,
+    "tags": ["assumption", "education_policy", "future_skills"]
+  },
+  {
+    "id": "wg_deduct_003",
+    "module": "watson",
+    "subtype": "deduction",
+    "difficulty": "medium",
+    "topic": "deduction",
+    "question": "Premises: 'Only experienced engineers qualify for the senior role. Bayo is not experienced.'\n\nConclusion: Bayo does not qualify for the senior role.",
+    "options": {
+      "A": "Conclusion follows",
+      "B": "Conclusion does not follow"
+    },
+    "correct": "A",
+    "explanation": "The prerequisite for the role is experience. Bayo lacks experience. Therefore he does not qualify — logically valid.",
+    "deep_explanation": {
+      "why_correct": "Experience is a necessary condition for the role. Without it, qualification is impossible. Modus tollens: ¬experience → ¬qualify.",
+      "why_wrong": {
+        "B": "There are no other stated paths to qualification — the conclusion is airtight given the premises."
+      },
+      "strategy_tip": "When a condition is stated as NECESSARY ('only X can Y'), lacking that condition means lacking the outcome."
+    },
+    "avg_time_seconds": 40,
+    "tags": ["deduction", "necessary_conditions", "modus_tollens"]
+  }
+]

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% block title %}Career Prep — Aptutor{% endblock %}
+
+{% block extra_css %}
+<style>
+  .career-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .career-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; cursor: pointer;
+    transition: all 0.22s; position: relative; overflow: hidden;
+  }
+  .career-card:hover { border-color: var(--border-light); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .career-card.selected { border-color: var(--accent); background: var(--bg-card-hover); }
+  .career-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent); transform: scaleX(0); transition: transform 0.22s;
+  }
+  .career-card:hover::before, .career-card.selected::before { transform: scaleX(1); }
+  .career-icon { font-size: 36px; margin-bottom: 12px; }
+  .career-name { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .career-employers { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 10px; }
+  .career-desc { font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-bottom: 14px; }
+  .career-meta { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* Profile panel */
+  .profile-panel {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px;
+    display: none; animation: fadeSlideIn 0.3s ease;
+  }
+  .profile-panel.show { display: block; }
+  .profile-header { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 20px; flex-wrap: wrap; }
+  .profile-icon { font-size: 48px; }
+  .profile-name { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .profile-sub { color: var(--text-muted); font-size: 14px; }
+  .profile-tip {
+    background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);
+    border-radius: var(--radius-sm); padding: 14px; margin-bottom: 20px;
+    font-size: 13px; color: var(--warning); line-height: 1.6;
+  }
+  .profile-tip::before { content: '💡 Insider Tip: '; font-weight: 700; }
+  .employers-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .employer-tag {
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    padding: 4px 10px; border-radius: 100px;
+    font-size: 12px; color: var(--text-secondary); font-family: var(--font-mono);
+  }
+  .focus-areas { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-bottom: 20px; }
+  .focus-item {
+    background: var(--accent-glow); border: 1px solid rgba(61,127,255,0.2);
+    border-radius: 8px; padding: 8px 12px; font-size: 12px;
+    color: var(--accent-bright); font-family: var(--font-mono);
+    text-align: center;
+  }
+  .diff-badge { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+
+  /* Questions list */
+  .career-q-list { display: flex; flex-direction: column; gap: 10px; }
+  .career-q-item {
+    background: var(--bg-secondary); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 16px; cursor: pointer;
+    transition: all 0.18s; display: flex; align-items: flex-start; gap: 12px;
+  }
+  .career-q-item:hover { border-color: var(--border-light); background: var(--bg-card); }
+  .q-num {
+    width: 28px; height: 28px; border-radius: 6px; background: var(--accent-glow);
+    border: 1px solid rgba(61,127,255,0.2); display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 12px; color: var(--accent-bright); flex-shrink: 0;
+  }
+  .q-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .q-meta { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+
+  @media (max-width: 600px) {
+    .career-grid { grid-template-columns: 1fr; }
+    .focus-areas { grid-template-columns: 1fr 1fr; }
+    .profile-header { gap: 12px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🎯 Career Prep</h1>
+<p class="page-subtitle">Tailored practice for your target employer — questions matched to how they actually test</p>
+
+<!-- Career selection grid -->
+<div class="career-grid" id="careerGrid">
+  <div style="color:var(--text-muted);font-size:13px;padding:40px;text-align:center;">Loading careers...</div>
+</div>
+
+<!-- Profile panel (shown after selection) -->
+<div class="profile-panel" id="profilePanel">
+  <div class="profile-header">
+    <div class="profile-icon" id="profileIcon"></div>
+    <div>
+      <div class="profile-name" id="profileName"></div>
+      <div class="profile-sub" id="profileSub"></div>
+    </div>
+    <div style="margin-left:auto;">
+      <button class="btn btn-primary" onclick="startCareerTest()">Start Tailored Test →</button>
+    </div>
+  </div>
+  <div class="profile-tip" id="profileTip"></div>
+  <div class="section-title" style="font-size:14px;margin-bottom:10px;">Top employers using this format</div>
+  <div class="employers-list" id="employersList"></div>
+  <div class="section-title" style="font-size:14px;margin-bottom:10px;">Key areas tested</div>
+  <div class="focus-areas" id="focusAreas"></div>
+  <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap;" id="diffRow"></div>
+  <div class="section-header">
+    <div class="section-title">Sample Questions for This Role</div>
+    <button class="btn btn-sm btn-secondary" onclick="askCareerTutor()">🤖 Ask AI About This Career</button>
+  </div>
+  <div class="career-q-list" id="careerQList">
+    <div style="color:var(--text-muted);font-size:13px;padding:20px 0;">Select a career above to see tailored questions.</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let _careers = {};
+let _selectedCareer = null;
+
+async function loadCareers() {
+  try {
+    const res = await fetch('/api/careers');
+    _careers = await res.json();
+    renderCareerGrid(_careers);
+  } catch(e) {
+    document.getElementById('careerGrid').innerHTML = '<p style="color:var(--danger)">Could not load career profiles.</p>';
+  }
+}
+
+function renderCareerGrid(careers) {
+  const grid = document.getElementById('careerGrid');
+  const diffLabel = { easy:'Easy', medium:'Medium', hard:'Hard', very_high:'Very High' };
+  const pressLabel = { low:'Low pressure', medium:'Medium pressure', high:'High pressure', very_high:'Very high pressure' };
+
+  grid.innerHTML = Object.entries(careers).map(([id, c]) => `
+    <div class="career-card" id="ccard_${id}" onclick="selectCareer('${id}')">
+      <div class="career-icon">${c.icon}</div>
+      <div class="career-name">${c.label}</div>
+      <div class="career-employers">${c.employers.slice(0,3).join(' · ')}${c.employers.length > 3 ? ' +more' : ''}</div>
+      <div class="career-desc">${c.description}</div>
+      <div class="career-meta">
+        <span class="badge badge-${c.difficulty==='hard'?'danger':c.difficulty==='medium'?'accent':'success'}">${diffLabel[c.difficulty]||c.difficulty}</span>
+        <span class="badge badge-muted">${pressLabel[c.time_pressure]||c.time_pressure}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function selectCareer(id) {
+  _selectedCareer = id;
+
+  // Highlight selected card
+  document.querySelectorAll('.career-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById(`ccard_${id}`)?.classList.add('selected');
+
+  const profile = _careers[id];
+  if (!profile) return;
+
+  // Fill profile panel
+  document.getElementById('profileIcon').textContent = profile.icon;
+  document.getElementById('profileName').textContent = profile.label;
+  document.getElementById('profileSub').textContent = profile.description;
+  document.getElementById('profileTip').textContent = profile.tips;
+  document.getElementById('employersList').innerHTML = profile.employers.map(e =>
+    `<span class="employer-tag">${e}</span>`
+  ).join('');
+  document.getElementById('focusAreas').innerHTML = (profile.focus || []).map(f =>
+    `<div class="focus-item">${f.replace(/_/g,' ')}</div>`
+  ).join('');
+
+  const diffColors = { easy:'success', medium:'accent', hard:'danger', very_high:'danger' };
+  const pressColors = { low:'success', medium:'accent', high:'warning', very_high:'danger' };
+  document.getElementById('diffRow').innerHTML = `
+    <div class="flex-gap">
+      <span style="font-size:12px;color:var(--text-muted);">Difficulty:</span>
+      <span class="badge badge-${diffColors[profile.difficulty]||'muted'}">${profile.difficulty}</span>
+    </div>
+    <div class="flex-gap">
+      <span style="font-size:12px;color:var(--text-muted);">Time pressure:</span>
+      <span class="badge badge-${pressColors[profile.time_pressure]||'muted'}">${(profile.time_pressure||'').replace('_',' ')}</span>
+    </div>
+  `;
+
+  document.getElementById('profilePanel').classList.add('show');
+  document.getElementById('profilePanel').scrollIntoView({ behavior:'smooth', block:'start' });
+
+  // Load tailored questions
+  loadCareerQuestions(id);
+}
+
+async function loadCareerQuestions(id) {
+  const list = document.getElementById('careerQList');
+  list.innerHTML = '<div style="color:var(--text-muted);font-size:13px;padding:16px 0;">Loading questions...</div>';
+  try {
+    const res = await fetch(`/api/careers/${id}/questions`);
+    const data = await res.json();
+    const qs = data.questions || [];
+    if (!qs.length) {
+      list.innerHTML = '<p style="color:var(--text-muted)">No questions found for this career profile yet.</p>';
+      return;
+    }
+    const diffColor = { easy:'success', medium:'accent', hard:'danger' };
+    list.innerHTML = qs.slice(0, 8).map((q, i) => `
+      <div class="career-q-item" onclick="previewQuestion('${q.id}')">
+        <div class="q-num">${i+1}</div>
+        <div>
+          <div class="q-text">${q.question.substring(0,110)}${q.question.length>110?'...':''}</div>
+          <div class="q-meta">
+            <span class="badge badge-${diffColor[q.difficulty]||'muted'}">${q.difficulty}</span>
+            <span class="badge badge-muted">${(q.topic||'').replace(/_/g,' ')}</span>
+            <span class="badge badge-muted">${q.module?.toUpperCase()}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = '<p style="color:var(--danger)">Error loading questions.</p>';
+  }
+}
+
+function previewQuestion(qid) {
+  if (window.sendQuickMessage) {
+    const panel = document.getElementById('chatbotPanel');
+    if (panel) panel.classList.add('open');
+    sendQuickMessage(`Show me question ${qid} and teach me how to approach it`);
+  }
+}
+
+async function startCareerTest() {
+  if (!_selectedCareer) return;
+  const profile = _careers[_selectedCareer];
+  // Determine module from focus
+  const focus = profile?.focus?.[0] || 'shl_numerical';
+  const module = focus.startsWith('gmat') ? 'gmat' : focus.startsWith('watson') ? 'watson' : 'shl';
+  const res = await fetch('/test/start', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ module, count: 10, mode: 'timed', difficulty: profile?.difficulty || 'medium' })
+  });
+  const d = await res.json();
+  if (d.session_id) window.location.href = `/test/${d.session_id}`;
+}
+
+function askCareerTutor() {
+  if (!_selectedCareer) return;
+  const profile = _careers[_selectedCareer];
+  const msg = `I'm preparing for ${profile.label} roles (${profile.employers.slice(0,2).join(', ')}). What should I focus on and how should I prepare?`;
+  if (window.sendQuickMessage) {
+    document.getElementById('chatbotPanel')?.classList.add('open');
+    sendQuickMessage(msg);
+  }
+}
+
+loadCareers();
+</script>
+{% endblock %}

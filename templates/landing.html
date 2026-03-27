@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aptutor — Ace Your Recruitment Test</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --ink:#06080f;
+      --surface:#0a0d18;
+      --card:#0f1322;
+      --gold:#f0a500;
+      --gold-hi:#ffc53d;
+      --gold-dim:rgba(240,165,0,0.12);
+      --gold-line:rgba(240,165,0,0.22);
+      --snow:#eef1fa;
+      --slate:#3a4060;
+      --mist:#6b7499;
+      --edge:#161c30;
+    }
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--snow);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+    /* ─── NOISE GRAIN ─── */
+    body::before{
+      content:'';position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none;z-index:0;opacity:0.6
+    }
+
+    /* ─── GRID ─── */
+    .bg-grid{
+      position:fixed;inset:0;z-index:0;pointer-events:none;
+      background-image:linear-gradient(rgba(240,165,0,0.03) 1px,transparent 1px),
+                       linear-gradient(90deg,rgba(240,165,0,0.03) 1px,transparent 1px);
+      background-size:80px 80px;
+    }
+    .bg-glow{
+      position:fixed;top:-20vh;left:50%;transform:translateX(-50%);
+      width:900px;height:500px;border-radius:50%;
+      background:radial-gradient(ellipse,rgba(240,165,0,0.07) 0%,transparent 70%);
+      pointer-events:none;z-index:0
+    }
+
+    /* ─── NAV ─── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 64px;height:68px;
+      background:rgba(6,8,15,0.75);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--edge);
+    }
+    .nav-brand{display:flex;align-items:center;gap:11px;text-decoration:none}
+    .nav-mark{
+      width:36px;height:36px;background:var(--gold);border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;
+      color:var(--ink);box-shadow:0 0 24px rgba(240,165,0,0.45)
+    }
+    .nav-name{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;
+      font-size:20px;letter-spacing:2px;text-transform:uppercase;color:var(--snow)
+    }
+    .nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+    .nav-links a{
+      font-size:13px;font-weight:500;color:var(--mist);
+      text-decoration:none;letter-spacing:0.3px;transition:color .18s
+    }
+    .nav-links a:hover{color:var(--snow)}
+    .nav-enter{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:9px 22px;border-radius:7px;
+      background:var(--gold);color:var(--ink)!important;
+      font-weight:700!important;font-size:13px!important;letter-spacing:0.5px;
+      box-shadow:0 0 24px rgba(240,165,0,0.35);
+      transition:all .2s!important
+    }
+    .nav-enter:hover{background:var(--gold-hi)!important;box-shadow:0 0 40px rgba(240,165,0,0.55)!important;transform:translateY(-1px)}
+
+    /* ─── HERO ─── */
+    .hero{
+      position:relative;z-index:1;
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:110px 32px 80px
+    }
+    .hero-pill{
+      display:inline-flex;align-items:center;gap:8px;
+      font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+      letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+      border:1px solid var(--gold-line);background:var(--gold-dim);
+      padding:7px 16px;border-radius:100px;margin-bottom:40px;
+      animation:up .6s ease both
+    }
+    .pill-dot{
+      width:7px;height:7px;background:var(--gold);border-radius:50%;
+      animation:blink 2.2s ease infinite
+    }
+    @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.7)}}
+
+    .hero-h1{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;
+      font-size:clamp(80px,13vw,160px);line-height:.86;letter-spacing:-2px;
+      color:var(--snow);margin-bottom:0;
+      animation:up .55s .08s ease both
+    }
+    .hero-h1 em{font-style:italic;color:var(--gold)}
+    .hero-h1-ghost{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;
+      font-size:clamp(76px,12vw,152px);line-height:.86;letter-spacing:-2px;
+      color:transparent;-webkit-text-stroke:1.5px var(--slate);
+      margin-bottom:44px;
+      animation:up .55s .15s ease both
+    }
+    .hero-body{
+      font-size:16px;line-height:1.75;color:var(--mist);
+      max-width:500px;margin-bottom:52px;
+      animation:up .55s .22s ease both
+    }
+    .hero-body strong{color:var(--snow);font-weight:500}
+    .cta-row{
+      display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+      animation:up .55s .3s ease both
+    }
+    .btn-enter{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:18px 44px;border-radius:9px;
+      font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:800;
+      letter-spacing:.5px;text-transform:uppercase;text-decoration:none;
+      background:var(--gold);color:var(--ink);
+      box-shadow:0 0 50px rgba(240,165,0,0.4),0 6px 24px rgba(0,0,0,0.5);
+      transition:all .25s cubic-bezier(.4,0,.2,1)
+    }
+    .btn-enter:hover{
+      background:var(--gold-hi);
+      box-shadow:0 0 80px rgba(240,165,0,0.6),0 8px 32px rgba(0,0,0,0.6);
+      transform:translateY(-4px) scale(1.02)
+    }
+    .btn-enter .arr{transition:transform .22s}
+    .btn-enter:hover .arr{transform:translateX(5px)}
+    .btn-ghost{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:18px 32px;border-radius:9px;
+      font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;
+      letter-spacing:.5px;text-transform:uppercase;text-decoration:none;
+      background:transparent;color:var(--mist);
+      border:1px solid var(--edge);
+      transition:all .2s
+    }
+    .btn-ghost:hover{border-color:var(--gold-line);color:var(--gold);background:var(--gold-dim)}
+
+    /* ─── TICKER ─── */
+    .ticker{
+      position:relative;z-index:1;overflow:hidden;
+      border-top:1px solid var(--gold-line);border-bottom:1px solid var(--gold-line);
+      background:var(--gold-dim);padding:13px 0
+    }
+    .ticker-inner{display:flex;animation:scroll 32s linear infinite;white-space:nowrap}
+    .t-item{
+      padding:0 44px;
+      font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+      color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;
+      flex-shrink:0;display:flex;align-items:center;gap:22px
+    }
+    .t-sep{width:5px;height:5px;background:var(--gold);border-radius:50%;opacity:0.6}
+    @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* ─── NUMBERS STRIP ─── */
+    .numbers{
+      position:relative;z-index:1;
+      display:grid;grid-template-columns:repeat(4,1fr);
+      border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);
+      background:var(--surface)
+    }
+    .num-cell{
+      padding:36px 24px;text-align:center;
+      border-right:1px solid var(--edge)
+    }
+    .num-cell:last-child{border-right:none}
+    .num-val{
+      display:block;font-family:'Barlow Condensed',sans-serif;
+      font-size:52px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:6px
+    }
+    .num-label{
+      font-family:'IBM Plex Mono',monospace;font-size:10px;
+      color:var(--mist);letter-spacing:1.5px;text-transform:uppercase
+    }
+
+    /* ─── FEATURES ─── */
+    .section{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:110px 64px}
+    .s-eyebrow{
+      font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;
+      color:var(--gold);text-transform:uppercase;margin-bottom:18px
+    }
+    .s-title{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;
+      font-size:clamp(44px,5.5vw,72px);line-height:.92;letter-spacing:-1px;
+      color:var(--snow);margin-bottom:72px
+    }
+    .s-title span{color:var(--gold)}
+
+    .feat-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      border:1px solid var(--edge);gap:0
+    }
+    .feat{
+      padding:40px 36px;border-right:1px solid var(--edge);border-bottom:1px solid var(--edge);
+      position:relative;overflow:hidden;transition:background .25s;background:var(--surface)
+    }
+    .feat:nth-child(3n){border-right:none}
+    .feat:nth-child(n+4){border-bottom:none}
+    .feat:hover{background:var(--card)}
+    .feat::after{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--gold),transparent);
+      transform:scaleX(0);transform-origin:left;transition:transform .3s
+    }
+    .feat:hover::after{transform:scaleX(1)}
+    .feat-ico{font-size:32px;margin-bottom:20px;display:block}
+    .feat-name{
+      font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;
+      text-transform:uppercase;letter-spacing:.5px;color:var(--snow);margin-bottom:10px
+    }
+    .feat-desc{font-size:13px;color:var(--mist);line-height:1.7}
+
+    /* ─── MODULES ─── */
+    .modules-section{
+      position:relative;z-index:1;
+      background:var(--surface);
+      border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)
+    }
+    .modules-inner{max-width:1240px;margin:0 auto;padding:110px 64px}
+    .mod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:4px}
+    .mod-card{
+      border:1px solid var(--edge);border-radius:14px;padding:36px 30px;
+      background:var(--ink);text-decoration:none;display:block;
+      position:relative;overflow:hidden;transition:all .28s cubic-bezier(.4,0,.2,1)
+    }
+    .mod-card:hover{
+      border-color:var(--gold-line);transform:translateY(-6px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 0 1px var(--gold-line);
+      background:var(--card)
+    }
+    .mod-card::before{
+      content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--gold),var(--gold-hi));
+      opacity:0;transition:opacity .3s
+    }
+    .mod-card:hover::before{opacity:1}
+    .mod-n{
+      font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;
+      color:var(--slate);text-transform:uppercase;margin-bottom:22px;display:block
+    }
+    .mod-title{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;
+      text-transform:uppercase;letter-spacing:.5px;color:var(--snow);
+      line-height:.95;margin-bottom:14px
+    }
+    .mod-desc{font-size:13px;color:var(--mist);line-height:1.65;margin-bottom:22px}
+    .mod-tags{display:flex;flex-wrap:wrap;gap:7px}
+    .mod-tag{
+      font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gold);
+      border:1px solid var(--gold-line);padding:4px 9px;border-radius:4px;
+      text-transform:uppercase;letter-spacing:.5px
+    }
+
+    /* ─── PROCESS ─── */
+    .process{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:110px 64px}
+    .proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--edge)}
+    .proc-step{
+      padding:44px 32px;border-right:1px solid var(--edge);
+      transition:background .2s
+    }
+    .proc-step:last-child{border-right:none}
+    .proc-step:hover{background:var(--card)}
+    .proc-num{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:64px;
+      color:var(--gold-line);line-height:1;margin-bottom:20px;display:block
+    }
+    .proc-title{
+      font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;
+      text-transform:uppercase;color:var(--snow);margin-bottom:10px
+    }
+    .proc-desc{font-size:13px;color:var(--mist);line-height:1.65}
+
+    /* ─── FINAL CTA ─── */
+    .finale{
+      position:relative;z-index:1;text-align:center;
+      padding:140px 64px;overflow:hidden
+    }
+    .finale::before{
+      content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:700px;height:700px;border-radius:50%;
+      background:radial-gradient(circle,rgba(240,165,0,0.09) 0%,transparent 70%);
+      pointer-events:none
+    }
+    .finale-h{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;
+      font-size:clamp(60px,10vw,120px);line-height:.88;letter-spacing:-2px;
+      margin-bottom:32px
+    }
+    .finale-h .solid{color:var(--snow)}
+    .finale-h .outline{
+      color:transparent;
+      -webkit-text-stroke:2px var(--gold);
+      display:block
+    }
+    .finale-sub{font-size:16px;color:var(--mist);margin-bottom:52px;max-width:420px;margin-left:auto;margin-right:auto}
+
+    /* ─── FOOTER ─── */
+    footer{
+      position:relative;z-index:1;background:var(--surface);
+      border-top:1px solid var(--edge);
+      padding:28px 64px;display:flex;align-items:center;justify-content:space-between
+    }
+    .ft-brand{
+      font-family:'Barlow Condensed',sans-serif;font-weight:900;
+      font-size:17px;letter-spacing:2px;text-transform:uppercase;color:var(--slate)
+    }
+    .ft-copy{
+      font-family:'IBM Plex Mono',monospace;font-size:11px;
+      color:var(--slate);letter-spacing:.5px
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.in{opacity:1;transform:translateY(0)}
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:960px){
+      nav{padding:0 24px}
+      .nav-links{display:none}
+      .hero{padding:100px 20px 60px}
+      .section,.process,.finale{padding:64px 20px}
+      .modules-inner{padding:64px 20px}
+      .feat-grid,.mod-grid,.proc-grid{grid-template-columns:1fr;gap:0}
+      .feat{border-right:none!important}
+      .proc-step{border-right:none!important;border-bottom:1px solid var(--edge)}
+      .proc-step:last-child{border-bottom:none}
+      .numbers{grid-template-columns:1fr 1fr}
+      .num-cell:nth-child(2){border-right:none}
+      .num-cell:nth-child(n+3){border-top:1px solid var(--edge)}
+      footer{padding:20px;flex-direction:column;gap:8px;text-align:center}
+      .hero-h1{font-size:clamp(56px,15vw,120px)}
+      .hero-h1-ghost{font-size:clamp(52px,14vw,112px)}
+      .s-title{font-size:clamp(36px,7vw,56px)}
+      .finale-h{font-size:clamp(44px,9vw,80px)}
+      .cta-row{flex-direction:column;align-items:center}
+      .btn-enter,.btn-ghost{width:100%;max-width:340px;justify-content:center}
+    }
+
+    @media(max-width:600px){
+      .hero{padding:90px 16px 50px}
+      .hero-pill{font-size:9px;padding:5px 12px}
+      .hero-h1{font-size:clamp(48px,16vw,90px);letter-spacing:-1px}
+      .hero-h1-ghost{font-size:clamp(44px,15vw,84px)}
+      .hero-body{font-size:14px}
+      .btn-enter{font-size:18px;padding:16px 32px}
+      .btn-ghost{font-size:17px;padding:14px 24px}
+      .numbers{grid-template-columns:1fr 1fr}
+      .num-val{font-size:38px}
+      .num-label{font-size:9px}
+      .section,.process{padding:52px 16px}
+      .modules-inner{padding:52px 16px}
+      .finale{padding:72px 16px}
+      .s-title{font-size:clamp(32px,8vw,48px);margin-bottom:40px}
+      .finale-h{font-size:clamp(36px,10vw,64px)}
+      .mod-title{font-size:24px}
+      .feat-name{font-size:18px}
+      .proc-num{font-size:48px}
+      .ft-copy{font-size:9px;letter-spacing:0}
+    }
+
+    @media(max-width:420px){
+      nav{padding:0 16px;height:60px}
+      .nav-mark{width:30px;height:30px;font-size:16px}
+      .nav-name{font-size:17px}
+      .hero{padding:80px 14px 44px}
+      .hero-pill{font-size:9px;letter-spacing:1px;padding:5px 10px}
+      .hero-h1{font-size:clamp(42px,17vw,72px)}
+      .hero-h1-ghost{font-size:clamp(38px,16vw,68px);margin-bottom:28px}
+      .hero-body{font-size:13px;max-width:100%}
+      .btn-enter{font-size:16px;padding:14px 28px}
+      .numbers{grid-template-columns:1fr 1fr}
+      .num-val{font-size:32px}
+      .t-item{padding:0 24px;font-size:10px}
+      .feat{padding:28px 20px}
+      .mod-card{padding:24px 20px}
+      .proc-step{padding:32px 20px}
+      .finale{padding:60px 14px}
+      .finale-h{font-size:clamp(32px,10.5vw,56px);letter-spacing:-1px}
+    }
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">
+    <div class="nav-mark">A</div>
+    <span class="nav-name">Aptutor</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#modules">Modules</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="/app" class="nav-enter">Enter App <span>→</span></a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pill"><span class="pill-dot"></span> GMAT · SHL · Watson-Glaser — Free Beta</div>
+
+  <h1 class="hero-h1">ACE YOUR<br><em>APTITUDE</em></h1>
+  <div class="hero-h1-ghost">TEST TODAY</div>
+
+  <p class="hero-body">
+    The sharpest prep platform for <strong>Nigerian recruitment tests</strong>. Timed practice, AI tutoring, deep explanations, and analytics — no account, no friction.
+  </p>
+
+  <div class="cta-row">
+    <a href="/app" class="btn-enter">Enter App <span class="arr">→</span></a>
+    <a href="#modules" class="btn-ghost">See Modules</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="t-item">GMAT Quantitative <span class="t-sep"></span></div>
+    <div class="t-item">SHL Numerical <span class="t-sep"></span></div>
+    <div class="t-item">Watson-Glaser Critical Thinking <span class="t-sep"></span></div>
+    <div class="t-item">Timed Test Mode <span class="t-sep"></span></div>
+    <div class="t-item">Study Mode <span class="t-sep"></span></div>
+    <div class="t-item">AI Tutor <span class="t-sep"></span></div>
+    <div class="t-item">Performance Analytics <span class="t-sep"></span></div>
+    <div class="t-item">Daily Challenge <span class="t-sep"></span></div>
+    <div class="t-item">Leaderboard <span class="t-sep"></span></div>
+    <div class="t-item">Deep Explanations <span class="t-sep"></span></div>
+    <div class="t-item">GMAT Quantitative <span class="t-sep"></span></div>
+    <div class="t-item">SHL Numerical <span class="t-sep"></span></div>
+    <div class="t-item">Watson-Glaser Critical Thinking <span class="t-sep"></span></div>
+    <div class="t-item">Timed Test Mode <span class="t-sep"></span></div>
+    <div class="t-item">Study Mode <span class="t-sep"></span></div>
+    <div class="t-item">AI Tutor <span class="t-sep"></span></div>
+    <div class="t-item">Performance Analytics <span class="t-sep"></span></div>
+    <div class="t-item">Daily Challenge <span class="t-sep"></span></div>
+    <div class="t-item">Leaderboard <span class="t-sep"></span></div>
+    <div class="t-item">Deep Explanations <span class="t-sep"></span></div>
+  </div>
+</div>
+
+<!-- NUMBERS -->
+<div class="numbers reveal">
+  <div class="num-cell"><span class="num-val">43+</span><span class="num-label">Practice Questions</span></div>
+  <div class="num-cell"><span class="num-val">3</span><span class="num-label">Test Modules</span></div>
+  <div class="num-cell"><span class="num-val">0</span><span class="num-label">Account Required</span></div>
+  <div class="num-cell"><span class="num-val">∞</span><span class="num-label">Free Practice</span></div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="s-eyebrow">// What you get</div>
+  <div class="s-title">Built For<br><span>Speed & Clarity</span></div>
+  <div class="feat-grid">
+    <div class="feat reveal"><span class="feat-ico">⏱</span><div class="feat-name">Timed Test Mode</div><div class="feat-desc">90 seconds per question, real exam pressure. Timer pulses red at 30s. Auto-submits when time runs out.</div></div>
+    <div class="feat reveal"><span class="feat-ico">📖</span><div class="feat-name">Study Mode</div><div class="feat-desc">Untimed practice with instant answer reveal. Three-tab explanations: why correct, why each wrong option fails, and strategy tips.</div></div>
+    <div class="feat reveal"><span class="feat-ico">🤖</span><div class="feat-name">AI Tutor</div><div class="feat-desc">Context-aware chatbot that knows your current question and last answer. Ask for explanations, shortcuts, or why you were wrong.</div></div>
+    <div class="feat reveal"><span class="feat-ico">📊</span><div class="feat-name">Analytics</div><div class="feat-desc">After every test: score breakdown by topic, time spent per question, accuracy trends, and your top weak areas.</div></div>
+    <div class="feat reveal"><span class="feat-ico">💡</span><div class="feat-name">Insights Library</div><div class="feat-desc">Every question has a full insight card — correct reasoning, wrong-option analysis, and an exam strategy tip you can apply instantly.</div></div>
+    <div class="feat reveal"><span class="feat-ico">🔥</span><div class="feat-name">Daily Challenge</div><div class="feat-desc">5 curated questions every morning. Same set for all users — compete on the leaderboard and build a daily practice streak.</div></div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="modules-section" id="modules">
+  <div class="modules-inner">
+    <div class="s-eyebrow">// Test modules</div>
+    <div class="s-title">Three Paths<br>To <span>Mastery</span></div>
+    <div class="mod-grid">
+      <a href="/app" class="mod-card reveal">
+        <span class="mod-n">01 — GMAT-Style</span>
+        <div class="mod-title">Quantitative<br>Reasoning</div>
+        <div class="mod-desc">Algebra, percentages, ratios, geometry, probability, sequences, and data sufficiency. Core format for Nigerian banking and consulting tests.</div>
+        <div class="mod-tags"><span class="mod-tag">Quantitative</span><span class="mod-tag">Critical Reasoning</span><span class="mod-tag">Data Sufficiency</span></div>
+      </a>
+      <a href="/app" class="mod-card reveal">
+        <span class="mod-n">02 — SHL-Style</span>
+        <div class="mod-title">Aptitude<br>Assessment</div>
+        <div class="mod-desc">The format used in Dragnet, GTBank, Shell, and graduate programmes. Numerical tables, verbal inference, and inductive pattern recognition.</div>
+        <div class="mod-tags"><span class="mod-tag">Numerical</span><span class="mod-tag">Verbal</span><span class="mod-tag">Inductive</span></div>
+      </a>
+      <a href="/app" class="mod-card reveal">
+        <span class="mod-n">03 — Watson-Glaser</span>
+        <div class="mod-title">Critical<br>Thinking</div>
+        <div class="mod-desc">Used in law firms, consulting, and senior corporate roles. Tests reasoning under logical constraints — inference, assumption, deduction, evaluation.</div>
+        <div class="mod-tags"><span class="mod-tag">Inference</span><span class="mod-tag">Assumption</span><span class="mod-tag">Deduction</span><span class="mod-tag">Evaluation</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="process" id="how">
+  <div class="s-eyebrow">// How it works</div>
+  <div class="s-title">Four Steps<br>To <span>Confidence</span></div>
+  <div class="proc-grid">
+    <div class="proc-step reveal"><span class="proc-num">01</span><div class="proc-title">Pick a Module</div><div class="proc-desc">Choose GMAT, SHL, or Watson-Glaser. Filter by sub-type and difficulty. Set 5 to 20 questions.</div></div>
+    <div class="proc-step reveal"><span class="proc-num">02</span><div class="proc-title">Take the Test</div><div class="proc-desc">Timed or untimed. Skip and flag questions. Watch the progress bar. Beat the clock.</div></div>
+    <div class="proc-step reveal"><span class="proc-num">03</span><div class="proc-title">Review Results</div><div class="proc-desc">See your score, topic accuracy, time per question, and every wrong answer explained in full.</div></div>
+    <div class="proc-step reveal"><span class="proc-num">04</span><div class="proc-title">Ask the AI</div><div class="proc-desc">Stuck on something? Open the AI Tutor at any point. It knows which question you're on and what you answered.</div></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="finale">
+  <div class="finale-h reveal">
+    <span class="solid">Start</span>
+    <span class="outline">Practising</span>
+    <span class="solid">Now</span>
+  </div>
+  <p class="finale-sub reveal">No account. No card. No setup. Click once and you're inside.</p>
+  <a href="/app" class="btn-enter reveal" style="font-size:24px;padding:22px 60px;">Enter Aptutor <span class="arr">→</span></a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-brand">Aptutor</div>
+  <div class="ft-copy">GMAT · SHL · WATSON-GLASER · FREE BETA · NO LOGIN REQUIRED</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, {threshold: 0.08});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

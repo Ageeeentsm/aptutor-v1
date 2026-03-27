@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+  .streak-flame { font-size: 20px; }
+  .weak-topic { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .weak-topic:last-child { border-bottom: none; }
+  .module-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 100px; font-size: 11px; font-weight: 600;
+    text-transform: uppercase; font-family: var(--font-mono); letter-spacing: 0.5px;
+  }
+  .module-pill.gmat { background: rgba(61,127,255,0.12); color: var(--accent-bright); }
+  .module-pill.shl { background: rgba(34,197,94,0.12); color: var(--success); }
+  .module-pill.watson { background: rgba(245,158,11,0.12); color: var(--warning); }
+  .daily-card {
+    background: linear-gradient(135deg, rgba(61,127,255,0.12) 0%, rgba(34,197,94,0.08) 100%);
+    border: 1px solid rgba(61,127,255,0.2);
+    border-radius: var(--radius);
+    padding: 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    margin-bottom: 28px;
+  }
+  .daily-label { font-size: 11px; font-weight: 600; color: var(--accent-bright); letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; font-family: var(--font-mono); }
+  .daily-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .daily-sub { font-size: 13px; color: var(--text-muted); }
+  .perf-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .perf-bar-label { font-size: 12px; color: var(--text-muted); width: 80px; flex-shrink: 0; }
+  .perf-bar-track { flex: 1; }
+  .perf-bar-pct { font-size: 12px; font-family: var(--font-mono); font-weight: 600; color: var(--text-secondary); width: 40px; text-align: right; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="dashLoading" style="display:none">
+  <div class="stats-grid">
+    <div class="skeleton" style="height:100px"></div>
+    <div class="skeleton" style="height:100px"></div>
+    <div class="skeleton" style="height:100px"></div>
+    <div class="skeleton" style="height:100px"></div>
+  </div>
+</div>
+
+<!-- Greeting -->
+<div class="flex-between mb-24">
+  <div>
+    <h1 class="page-title">Good <span id="timeOfDay">day</span>, <span id="greetName">—</span> 👋</h1>
+    <p class="page-subtitle">Here's your progress overview</p>
+  </div>
+  <a href="/test" class="btn btn-primary btn-lg">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+    Start Test
+  </a>
+</div>
+
+<!-- Daily Challenge -->
+<div class="daily-card" id="dailyCard">
+  <div>
+    <div class="daily-label">🔥 Daily Challenge</div>
+    <div class="daily-title">5 Questions · Mixed Modules</div>
+    <div class="daily-sub" id="dailySub">Loading today's challenge...</div>
+  </div>
+  <a href="/test" class="btn btn-primary" id="dailyBtn" onclick="startDailyChallenge(event)">
+    Begin Challenge →
+  </a>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid" id="statsGrid">
+  <div class="stat-card accent">
+    <div class="stat-label">Tests Taken</div>
+    <div class="stat-value accent" id="statTests">—</div>
+    <div class="stat-sub">all time</div>
+  </div>
+  <div class="stat-card success">
+    <div class="stat-label">Avg Accuracy</div>
+    <div class="stat-value success" id="statAccuracy">—</div>
+    <div class="stat-sub">across all tests</div>
+  </div>
+  <div class="stat-card warning">
+    <div class="stat-label">Avg Time/Q</div>
+    <div class="stat-value warning" id="statTime">—</div>
+    <div class="stat-sub">seconds per question</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label"><span class="streak-flame">🔥</span> Streak</div>
+    <div class="stat-value" id="statStreak">—</div>
+    <div class="stat-sub">days in a row</div>
+  </div>
+</div>
+
+<!-- Two-column layout -->
+<div class="grid-2" style="gap: 24px;">
+
+  <!-- Module Performance -->
+  <div class="card">
+    <div class="section-header mb-16">
+      <div class="section-title">Module Performance</div>
+    </div>
+    <div id="modulePerf">
+      <div class="perf-bar">
+        <div class="perf-bar-label">GMAT</div>
+        <div class="perf-bar-track">
+          <div class="progress-bar-wrap"><div class="progress-bar-fill" id="barGmat" style="width:0%"></div></div>
+        </div>
+        <div class="perf-bar-pct" id="pctGmat">—</div>
+      </div>
+      <div class="perf-bar">
+        <div class="perf-bar-label">SHL</div>
+        <div class="perf-bar-track">
+          <div class="progress-bar-wrap"><div class="progress-bar-fill success" id="barShl" style="width:0%"></div></div>
+        </div>
+        <div class="perf-bar-pct" id="pctShl">—</div>
+      </div>
+      <div class="perf-bar">
+        <div class="perf-bar-label">Watson</div>
+        <div class="perf-bar-track">
+          <div class="progress-bar-wrap"><div class="progress-bar-fill warning" id="barWatson" style="width:0%"></div></div>
+        </div>
+        <div class="perf-bar-pct" id="pctWatson">—</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <div class="section-title" style="font-size:14px; margin-bottom:12px;">⚠️ Weak Areas</div>
+      <div id="weakAreas">
+        <p style="color: var(--text-muted); font-size:13px;">Complete at least one test to see your weak areas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Tests -->
+  <div class="card">
+    <div class="section-header mb-16">
+      <div class="section-title">Recent Tests</div>
+      <a href="/test" class="btn btn-sm btn-secondary">+ New Test</a>
+    </div>
+    <div id="recentTests">
+      <p style="color: var(--text-muted); font-size:13px;">No tests completed yet. <a href="/test" style="color:var(--accent-bright)">Start your first test →</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Quick Actions -->
+<div style="margin-top: 24px;">
+  <div class="section-title mb-16">Quick Start</div>
+  <div class="module-grid">
+    <div class="module-card" onclick="window.location.href='/test?module=gmat'">
+      <div class="module-icon gmat">📊</div>
+      <div class="module-name">GMAT Quantitative</div>
+      <div class="module-desc">Algebra, percentages, ratios, geometry, probability, and data sufficiency</div>
+      <div style="margin-top:14px;"><span class="badge badge-accent">15 questions</span> <span class="badge badge-muted">22 min</span></div>
+    </div>
+    <div class="module-card" onclick="window.location.href='/test?module=shl'">
+      <div class="module-icon shl">🔢</div>
+      <div class="module-name">SHL Assessment</div>
+      <div class="module-desc">Numerical, verbal, and inductive reasoning — the format used in Dragnet & graduate assessments</div>
+      <div style="margin-top:14px;"><span class="badge badge-success">15 questions</span> <span class="badge badge-muted">20 min</span></div>
+    </div>
+    <div class="module-card" onclick="window.location.href='/test?module=watson'">
+      <div class="module-icon watson">🧠</div>
+      <div class="module-name">Watson-Glaser</div>
+      <div class="module-desc">Critical thinking: inference, assumption, deduction, interpretation, argument evaluation</div>
+      <div style="margin-top:14px;"><span class="badge badge-warning">12 questions</span> <span class="badge badge-muted">18 min</span></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ═══════════════════════════════════════════
+   Aptutor — dashboard.js
+   Load and render user stats, recent tests,
+   weak areas, and module performance
+   ═══════════════════════════════════════════ */
+
+// ── Greeting ──
+const hour = new Date().getHours();
+const greeting = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+const greetEl = document.getElementById('timeOfDay');
+if (greetEl) greetEl.textContent = greeting;
+
+// ── Load Stats ──
+async function loadDashboard() {
+  try {
+    const res = await fetch('/api/user/stats');
+    const data = await res.json();
+
+    // Greeting name
+    const nameEl = document.getElementById('greetName');
+    if (nameEl) nameEl.textContent = (data.username || 'Candidate').split(' ')[0];
+
+    // Stat cards
+    document.getElementById('statTests').textContent = data.total_tests || 0;
+    document.getElementById('statAccuracy').textContent = (data.accuracy || 0) + '%';
+    document.getElementById('statTime').textContent = (data.avg_time || 0) + 's';
+    document.getElementById('statStreak').textContent = (data.streak || 0) + ' 🔥';
+
+    // Module performance bars
+    renderModuleBars(data.module_stats || {});
+
+    // Weak areas
+    renderWeakAreas(data.weak_areas || []);
+
+    // Recent tests
+    renderRecentTests(data.recent_tests || []);
+
+  } catch (e) {
+    console.error('Failed to load stats:', e);
+  }
+}
+
+// ── Module Performance Bars ──
+function renderModuleBars(stats) {
+  const modules = ['gmat', 'shl', 'watson'];
+
+  modules.forEach(mod => {
+    const bar = document.getElementById(`bar${mod.charAt(0).toUpperCase() + mod.slice(1)}`);
+    const pct = document.getElementById(`pct${mod.charAt(0).toUpperCase() + mod.slice(1)}`);
+
+    const s = stats[mod];
+    if (s && s.total > 0) {
+      const acc = Math.round(s.correct / s.total * 100);
+      if (bar) setTimeout(() => { bar.style.width = acc + '%'; }, 300);
+      if (pct) pct.textContent = acc + '%';
+
+      // Color the bar
+      if (bar) {
+        bar.className = 'progress-bar-fill ' + (acc >= 70 ? 'success' : acc >= 50 ? '' : 'danger');
+      }
+    } else {
+      if (pct) pct.textContent = '—';
+    }
+  });
+}
+
+// ── Weak Areas ──
+function renderWeakAreas(areas) {
+  const el = document.getElementById('weakAreas');
+  if (!el) return;
+
+  if (!areas.length) {
+    el.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">Complete at least 2 tests to see your weak areas.</p>';
+    return;
+  }
+
+  el.innerHTML = areas.map(a => {
+    const pct = a.accuracy;
+    const col = pct >= 70 ? 'success' : pct >= 50 ? 'warning' : 'danger';
+    return `
+      <div class="weak-topic">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+          <span style="font-size:13px; color:var(--text-secondary); text-transform:capitalize;">${(a.topic || '').replace(/_/g,' ')}</span>
+          <span style="font-family:var(--font-mono); font-size:12px; color:var(--${col});">${pct}%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill ${col}" style="width:${pct}%; transition: width 0.8s ease;"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── Recent Tests ──
+function renderRecentTests(tests) {
+  const el = document.getElementById('recentTests');
+  if (!el) return;
+
+  if (!tests.length) {
+    el.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No tests completed yet. <a href="/test" style="color:var(--accent-bright)">Start your first test →</a></p>';
+    return;
+  }
+
+  const rows = tests.slice(0, 8).map(t => {
+    const modColor = t.module === 'gmat' ? 'accent' : t.module === 'shl' ? 'success' : 'warning';
+    const accColor = t.accuracy >= 70 ? 'success' : t.accuracy >= 50 ? 'warning' : 'danger';
+    return `
+      <tr>
+        <td><span class="module-pill ${t.module}">${t.module.toUpperCase()}</span></td>
+        <td style="color:var(--text-secondary);">${(t.subtype || 'mixed').replace('_',' ')}</td>
+        <td><span style="font-family:var(--font-mono); color:var(--${accColor});">${t.accuracy}%</span></td>
+        <td style="font-family:var(--font-mono); color:var(--text-muted);">${t.score}/${t.total}</td>
+        <td><span class="badge badge-muted">${t.date || ''}</span></td>
+        <td><a href="/results/${t.id}" style="color:var(--accent-bright); font-size:12px;">Review →</a></td>
+      </tr>
+    `;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th><th>Type</th><th>Accuracy</th><th>Score</th><th>Date</th><th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ── Daily Challenge ──
+async function startDailyChallenge(e) {
+  e.preventDefault();
+  try {
+    const res = await fetch('/api/daily-challenge');
+    const data = await res.json();
+
+    // Start a test session with these questions
+    // For simplicity, redirect to test selection with a flag
+    showToast('Starting today\'s challenge...', 'info');
+    // Start a mixed test
+    const startRes = await fetch('/test/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ module: 'gmat', subtype: '', difficulty: 'all', count: 5, mode: 'timed' })
+    });
+    const startData = await startRes.json();
+    if (startData.session_id) {
+      window.location.href = `/test/${startData.session_id}`;
+    }
+  } catch (e) {
+    showToast('Failed to load daily challenge', 'error');
+  }
+}
+
+// ── Load daily challenge info ──
+async function loadDailyInfo() {
+  try {
+    const res = await fetch('/api/daily-challenge');
+    const data = await res.json();
+    const sub = document.getElementById('dailySub');
+    if (sub) sub.textContent = `${data.total} questions · Mixed difficulty · ${new Date().toLocaleDateString('en-NG', { weekday: 'long', month: 'short', day: 'numeric' })}`;
+  } catch (e) {}
+}
+
+// ── Init ──
+loadDashboard();
+loadDailyInfo();
+
+</script>
+{% endblock %}

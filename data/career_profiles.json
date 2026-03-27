@@ -1,0 +1,79 @@
+{
+  "banking": {
+    "label": "Banking & Finance",
+    "employers": ["GTBank", "Access Bank", "Zenith Bank", "First Bank", "UBA", "Stanbic IBTC", "Citibank Nigeria"],
+    "icon": "🏦",
+    "description": "Nigerian banks use SHL-style numerical and verbal reasoning. Speed and accuracy under pressure.",
+    "focus": ["shl_numerical", "gmat_quantitative", "data_interpretation"],
+    "tips": "GTBank and Zenith heavily test data tables and percentage change. Practice reading financial tables fast.",
+    "difficulty": "medium",
+    "time_pressure": "high",
+    "sample_topics": ["percentages", "ratios", "profit_loss", "data_tables", "percentage_change"]
+  },
+  "consulting": {
+    "label": "Consulting & Strategy",
+    "employers": ["McKinsey", "BCG", "Deloitte", "PwC", "KPMG", "EY", "Accenture"],
+    "icon": "📊",
+    "description": "Case-style numerical reasoning plus Watson-Glaser critical thinking. Logical argument evaluation is key.",
+    "focus": ["gmat_critical_reasoning", "watson_evaluation", "gmat_data_sufficiency"],
+    "tips": "McKinsey PST-style: read the data first, then the question. Never calculate until you know what's needed.",
+    "difficulty": "hard",
+    "time_pressure": "medium",
+    "sample_topics": ["data_sufficiency", "assumption", "weakening_argument", "inference", "logical_reasoning"]
+  },
+  "oil_gas": {
+    "label": "Oil & Gas",
+    "employers": ["Shell", "Chevron", "TotalEnergies", "NLNG", "Schlumberger", "Halliburton", "ExxonMobil"],
+    "icon": "⛽",
+    "description": "Shell and Chevron use SHL OPQ plus numerical reasoning. Dragnet-style is common for junior roles.",
+    "focus": ["shl_numerical", "shl_inductive", "gmat_quantitative"],
+    "tips": "Shell uses time-pressured numerical tests. Estimation is key — don't calculate everything exactly.",
+    "difficulty": "hard",
+    "time_pressure": "very_high",
+    "sample_topics": ["data_interpretation", "ratios", "speed_distance", "work_rate", "sequences"]
+  },
+  "fmcg": {
+    "label": "FMCG & Consumer Goods",
+    "employers": ["Unilever", "Nestle", "PZ Cussons", "Guinness", "Nigerian Breweries", "Procter & Gamble"],
+    "icon": "🛒",
+    "description": "Unilever and Nestle use Dragnet + SHL verbal. Graduate trainees need strong verbal reasoning.",
+    "focus": ["shl_verbal", "shl_numerical", "watson_inference"],
+    "tips": "Unilever Digital Interview tests verbal inference. Read passages carefully — never infer beyond the text.",
+    "difficulty": "medium",
+    "time_pressure": "medium",
+    "sample_topics": ["reading_comprehension", "inference", "verbal_reasoning", "percentages", "profit_loss"]
+  },
+  "telco": {
+    "label": "Telecoms & Tech",
+    "employers": ["MTN", "Airtel", "Glo", "9mobile", "Flutterwave", "Paystack", "Andela"],
+    "icon": "📡",
+    "description": "MTN Nigeria uses numerical and abstract reasoning. Tech companies lean toward logical and inductive tests.",
+    "focus": ["shl_inductive", "gmat_quantitative", "shl_numerical"],
+    "tips": "Pattern recognition is heavily tested at telcos. Practice sequences and abstract shapes daily.",
+    "difficulty": "medium",
+    "time_pressure": "medium",
+    "sample_topics": ["sequences", "inductive_reasoning", "number_properties", "algebra", "pattern_recognition"]
+  },
+  "civil_service": {
+    "label": "Civil Service & Government",
+    "employers": ["Federal Civil Service", "NNPC", "CBN", "NDIC", "PENCOM", "SEC Nigeria"],
+    "icon": "🏛️",
+    "description": "CBN and NNPC use comprehensive aptitude tests covering all areas. WAEC-style knowledge tests included.",
+    "focus": ["gmat_quantitative", "shl_verbal", "watson_deduction"],
+    "tips": "CBN exams are comprehensive. Time management matters — don't get stuck on one question.",
+    "difficulty": "medium",
+    "time_pressure": "medium",
+    "sample_topics": ["algebra", "geometry", "reading_comprehension", "deduction", "number_properties"]
+  },
+  "graduate_trainee": {
+    "label": "Graduate Trainee (Any)",
+    "employers": ["Dragnet Solutions", "Phillips Consulting", "Workforce Group"],
+    "icon": "🎓",
+    "description": "Dragnet is used by 50+ Nigerian companies. Master this and you pass most graduate trainee tests.",
+    "focus": ["shl_numerical", "shl_verbal", "gmat_quantitative", "watson_inference"],
+    "tips": "Dragnet tests 4 areas in one sitting: quantitative, verbal, abstract, and speed. Don't spend too long on any one section.",
+    "difficulty": "medium",
+    "time_pressure": "high",
+    "sample_topics": ["percentages", "ratios", "reading_comprehension", "sequences", "inference"]
+  }
+}

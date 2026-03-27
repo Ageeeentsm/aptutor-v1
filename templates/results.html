@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+{% block title %}Results{% endblock %}
+
+{% block extra_css %}
+<style>
+  .results-q { padding: 14px 18px; display: flex; align-items: flex-start; gap: 12px; }
+  .results-q-num { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); width: 24px; flex-shrink: 0; padding-top: 2px; }
+  .results-q-text { font-size: 13px; color: var(--text-secondary); flex: 1; line-height: 1.5; }
+  .results-answer-row { display: flex; gap: 16px; margin-top: 6px; font-size: 12px; font-family: var(--font-mono); flex-wrap: wrap; }
+  .answer-chip { padding: 2px 8px; border-radius: 4px; }
+  .answer-chip.yours { background: rgba(239,68,68,0.1); color: var(--danger); }
+  .answer-chip.yours.correct { background: rgba(34,197,94,0.1); color: var(--success); }
+  .answer-chip.correct-ans { background: rgba(34,197,94,0.1); color: var(--success); }
+  .topic-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .topic-row:last-child { border-bottom: none; }
+  .topic-name { flex: 1; min-width: 100px; font-size: 13px; color: var(--text-secondary); }
+  .topic-score { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); width: 50px; text-align: right; }
+  .topic-bar { flex: 2; min-width: 80px; }
+  /* Results actions */
+  #resultsContent > div:last-child { flex-wrap: wrap; justify-content: center; }
+  @media (max-width: 600px) {
+    .results-q { padding: 12px 14px; gap: 8px; }
+    #resultsContent > div:last-child a { flex: 1 1 calc(50% - 6px); text-align: center; justify-content: center; font-size: 13px; padding: 10px 8px; }
+    .score-hero { padding: 28px 14px; }
+  }
+  @media (max-width: 420px) {
+    #resultsContent > div:last-child a { flex: 1 1 100%; }
+    .topic-bar { display: none; }
+    .topic-score { width: auto; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="resultsLoading" style="text-align:center; padding: 80px 40px; color: var(--text-muted);">
+  <div style="font-size: 36px; margin-bottom: 12px;">⏳</div>
+  <div>Calculating your results...</div>
+</div>
+
+<div id="resultsContent" style="display:none;">
+
+  <!-- Score Hero -->
+  <div class="score-hero" id="scoreHero">
+    <div class="score-ring" id="scoreRing">
+      <div class="score-number" id="scoreNumber">0%</div>
+      <div class="score-label" id="scoreLabel">0 / 0</div>
+    </div>
+    <div class="score-verdict" id="scoreVerdict">—</div>
+    <div class="score-detail" id="scoreDetail"></div>
+    <div style="display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;" id="scoreMeta"></div>
+  </div>
+
+  <!-- Two column: Topic Breakdown + Time Analysis -->
+  <div class="grid-2" style="gap:24px; margin-bottom:24px;">
+    <div class="card">
+      <div class="section-title mb-16">📊 Topic Breakdown</div>
+      <div id="topicBreakdown"></div>
+    </div>
+    <div class="card">
+      <div class="section-title mb-16">⏱ Time Analysis</div>
+      <div id="timeAnalysis"></div>
+      <div style="margin-top:24px;">
+        <div class="section-title" style="font-size:14px; margin-bottom:12px;">Next Steps</div>
+        <div id="nextSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question Review Accordion -->
+  <div class="card">
+    <div class="section-header mb-16">
+      <div class="section-title">📝 Question Review</div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn btn-sm btn-secondary" onclick="filterReview('all')">All</button>
+        <button class="btn btn-sm btn-secondary" onclick="filterReview('wrong')">Incorrect Only</button>
+      </div>
+    </div>
+    <div id="questionReview"></div>
+  </div>
+
+  <!-- Actions -->
+  <div style="display:flex; gap:12px; justify-content:center; margin-top:28px; flex-wrap:wrap;">
+    <a href="/test" class="btn btn-primary btn-lg">🔁 Take Another Test</a>
+    <a href="/study" class="btn btn-secondary btn-lg">📖 Study Mode</a>
+    <a href="/insights" class="btn btn-secondary btn-lg">💡 Review Insights</a>
+    <a href="/app" class="btn btn-secondary btn-lg">📈 Dashboard</a>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const sessionId = {{ session_id }};
+  let allQuestions = [];
+
+  async function loadResults() {
+    try {
+      const res = await fetch(`/api/results/${sessionId}`);
+      const data = await res.json();
+
+      document.getElementById('resultsLoading').style.display = 'none';
+      document.getElementById('resultsContent').style.display = 'block';
+
+      allQuestions = data.questions;
+
+      renderScoreHero(data);
+      renderTopicBreakdown(data.topic_breakdown);
+      renderTimeAnalysis(data);
+      renderQuestionReview(data.questions);
+
+    } catch (e) {
+      document.getElementById('resultsLoading').innerHTML = '<div style="color:var(--danger)">Error loading results.</div>';
+    }
+  }
+
+  function renderScoreHero(data) {
+    const ring = document.getElementById('scoreRing');
+    const pct = data.percentage;
+    ring.classList.add(data.passed ? 'pass' : 'fail');
+
+    document.getElementById('scoreNumber').textContent = pct + '%';
+    document.getElementById('scoreLabel').textContent = `${data.score} / ${data.total} correct`;
+    document.getElementById('scoreVerdict').textContent = data.passed ? '🎉 Well Done!' : '💪 Keep Practising';
+    document.getElementById('scoreDetail').textContent = data.passed
+      ? `You passed with ${pct}% accuracy — great performance!`
+      : `You scored ${pct}%. Target 60%+ to pass. Review weak topics and try again.`;
+
+    const meta = document.getElementById('scoreMeta');
+    const mins = Math.floor(data.time_taken / 60);
+    const secs = data.time_taken % 60;
+    meta.innerHTML = `
+      <span class="badge badge-muted">⏱ ${mins}m ${secs}s total time</span>
+      <span class="badge badge-muted">📊 ${data.module.toUpperCase()} · ${data.subtype}</span>
+      <span class="badge badge-muted">~${data.avg_time_per_question}s per question</span>
+    `;
+  }
+
+  function renderTopicBreakdown(topics) {
+    const el = document.getElementById('topicBreakdown');
+    if (!topics.length) {
+      el.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No topic data available.</p>';
+      return;
+    }
+    el.innerHTML = topics.map(t => `
+      <div class="topic-row">
+        <div class="topic-name">
+          <div>${t.topic}</div>
+          <div style="font-size:11px; color:var(--text-muted);">${t.correct}/${t.total} correct</div>
+        </div>
+        <div class="topic-bar">
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill ${t.status === 'strong' ? 'success' : t.status === 'average' ? '' : 'danger'}"
+                 style="width:${t.accuracy}%; transition: width 1s ease;"></div>
+          </div>
+        </div>
+        <div class="topic-score">${t.accuracy}%</div>
+        <span class="badge ${t.status === 'strong' ? 'badge-success' : t.status === 'average' ? 'badge-accent' : 'badge-danger'}">${t.status}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderTimeAnalysis(data) {
+    const el = document.getElementById('timeAnalysis');
+    const avg = data.avg_time_per_question;
+    const benchmark = 90;
+    const pct = Math.min(100, Math.round((avg / benchmark) * 100));
+    const speed = avg < 60 ? 'Fast' : avg < 90 ? 'On Target' : 'Slow';
+    const speedColor = avg < 60 ? 'success' : avg < 90 ? 'accent' : 'danger';
+
+    el.innerHTML = `
+      <div style="margin-bottom:16px;">
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">Average time per question</div>
+        <div style="font-family:var(--font-mono); font-size:28px; font-weight:600; color:var(--${speedColor === 'accent' ? 'accent-bright' : speedColor})">${avg}s</div>
+        <span class="badge badge-${speedColor}">${speed}</span>
+      </div>
+      <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">Speed vs 90s benchmark</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill ${speedColor}" style="width:${100 - Math.min(100, pct - 10)}%"></div>
+      </div>
+      <div style="font-size:12px; color:var(--text-muted); margin-top:8px;">
+        ${avg < 60 ? '⚡ Excellent speed! Make sure you\'re not rushing.' : avg < 90 ? '✅ Good pacing — right on target.' : '⚠️ Try to reduce time per question. Practice estimation and elimination.'}
+      </div>
+    `;
+
+    // Next steps
+    const weak = data.topic_breakdown.filter(t => t.status === 'weak').map(t => t.topic);
+    const ns = document.getElementById('nextSteps');
+    if (weak.length) {
+      ns.innerHTML = `<p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">Focus on these weak topics:</p>
+        ${weak.map(t => `<span class="badge badge-danger" style="margin-right:6px; margin-bottom:4px;">${t}</span>`).join('')}
+        <div style="margin-top:12px;">
+          <a href="/study" class="btn btn-sm btn-outline">Practice these topics →</a>
+        </div>`;
+    } else {
+      ns.innerHTML = `<p style="font-size:13px; color:var(--success);">✅ Strong performance across all topics! Try a harder difficulty next.</p>`;
+    }
+  }
+
+  function renderQuestionReview(questions, filter = 'all') {
+    const el = document.getElementById('questionReview');
+    const filtered = filter === 'wrong' ? questions.filter(q => !q.correct) : questions;
+
+    if (!filtered.length) {
+      el.innerHTML = '<p style="color:var(--text-muted); font-size:13px; text-align:center; padding:20px;">No questions to show.</p>';
+      return;
+    }
+
+    el.innerHTML = filtered.map((q, i) => {
+      const isCorrect = q.correct;
+      const de = q.deep_explanation || {};
+      const userWrong = !isCorrect && q.user_answer ? de.why_wrong?.[q.user_answer] : '';
+
+      return `
+      <div class="accordion-item ${isCorrect ? '' : 'has-error'}" id="qItem${i}">
+        <button class="accordion-header" onclick="toggleAccordion(${i})">
+          <div style="display:flex; align-items:center; gap:10px; flex:1; text-align:left;">
+            <span class="${isCorrect ? 'badge badge-success' : 'badge badge-danger'}">${isCorrect ? '✓' : '✗'}</span>
+            <span style="font-size:13px; color:var(--text-secondary);">Q${q.index + 1}: ${q.question.substring(0, 70)}${q.question.length > 70 ? '...' : ''}</span>
+          </div>
+          <svg class="accordion-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="accordion-body" id="qBody${i}">
+          <p style="font-size:14px; color:var(--text-primary); margin-bottom:14px; line-height:1.6;">${q.question}</p>
+          <div class="results-answer-row" style="margin-bottom:14px;">
+            <div>Your answer: <span class="answer-chip yours ${isCorrect ? 'correct' : ''}">${q.user_answer || 'Skipped'}</span></div>
+            ${!isCorrect ? `<div>Correct: <span class="answer-chip correct-ans">${q.correct_answer}</span></div>` : ''}
+          </div>
+          <div style="background: var(--bg-card); border-radius: 8px; padding: 14px; font-size:13px; color:var(--text-secondary); line-height:1.6; border:1px solid var(--border);">
+            <strong style="color:var(--text-primary);">Explanation:</strong> ${q.explanation}
+          </div>
+          ${userWrong ? `<div style="margin-top:10px; background: var(--danger-glow); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:12px; font-size:13px; color:var(--danger);">
+            <strong>Why ${q.user_answer} is wrong:</strong> ${userWrong}
+          </div>` : ''}
+          ${de.strategy_tip ? `<div class="strategy-tip">${de.strategy_tip}</div>` : ''}
+        </div>
+      </div>
+      `;
+    }).join('');
+  }
+
+  function toggleAccordion(i) {
+    const item = document.getElementById(`qItem${i}`);
+    item.classList.toggle('open');
+  }
+
+  function filterReview(type) {
+    renderQuestionReview(allQuestions, type);
+  }
+
+  loadResults();
+</script>
+{% endblock %}

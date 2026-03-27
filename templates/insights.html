@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block title %}Insights{% endblock %}
+
+{% block extra_css %}
+<style>
+  .insights-filters {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;
+    align-items: center;
+  }
+  .insight-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 14px;
+    transition: all var(--transition);
+  }
+  .insight-card:hover { border-color: var(--border-light); }
+  .insight-q {
+    padding: 20px 22px;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  }
+  .insight-q-text { font-size: 14px; line-height: 1.65; color: var(--text-secondary); flex: 1; }
+  .insight-expand { color: var(--text-muted); transition: transform var(--transition); flex-shrink: 0; margin-top: 2px; }
+  .insight-card.open .insight-expand { transform: rotate(180deg); }
+  .insight-body { display: none; border-top: 1px solid var(--border); }
+  .insight-card.open .insight-body { display: block; }
+  .insight-correct {
+    background: rgba(34,197,94,0.06);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 22px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .correct-tick { color: var(--success); font-size: 18px; flex-shrink: 0; }
+  .insight-correct-text { font-size: 13px; color: var(--success); font-weight: 600; }
+  .insight-correct-exp { font-size: 13px; color: var(--text-secondary); margin-top: 2px; line-height: 1.5; }
+  .wrong-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--border); }
+  .wrong-item { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); border-radius: 8px; padding: 10px 12px; }
+  .wrong-key { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--danger); margin-bottom: 4px; }
+  .wrong-exp { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .search-input-wrap { position: relative; flex: 1; min-width: 200px; }
+  .search-input-wrap input { padding-left: 36px; }
+  .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+  .search-icon svg { width: 15px; height: 15px; }
+  #insightCount { font-size: 13px; color: var(--text-muted); font-family: var(--font-mono); }
+  @media (max-width: 600px) {
+    .wrong-grid { grid-template-columns: 1fr; }
+    .insights-filters { flex-direction: column; align-items: stretch; }
+    .insight-q { padding: 14px 14px; }
+    .insight-q-text { font-size: 13px; }
+    .insight-correct { padding: 14px 16px; }
+  }
+  @media (max-width: 420px) {
+    .insight-q { padding: 12px 12px; flex-direction: column; gap: 6px; }
+    .insight-expand { align-self: flex-end; margin-top: -20px; }
+    .wrong-item { padding: 8px 10px; }
+    .wrong-key { font-size: 11px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">💡 Insights</h1>
+<p class="page-subtitle">Deep-dive explanations — understand not just the answer, but the reasoning</p>
+
+<!-- Filters -->
+<div class="insights-filters">
+  <div class="search-input-wrap">
+    <div class="search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+    <input type="text" class="form-input" id="searchInput" placeholder="Search questions or topics..." oninput="debounceLoad()" />
+  </div>
+
+  <select class="form-input" style="width:auto; min-width:130px;" id="modFilter" onchange="loadInsights()">
+    <option value="">All Modules</option>
+    <option value="gmat">GMAT</option>
+    <option value="shl">SHL</option>
+    <option value="watson">Watson-Glaser</option>
+  </select>
+
+  <select class="form-input" style="width:auto; min-width:130px;" id="diffFilter" onchange="loadInsights()">
+    <option value="">All Difficulties</option>
+    <option value="easy">Easy</option>
+    <option value="medium">Medium</option>
+    <option value="hard">Hard</option>
+  </select>
+
+  <span id="insightCount"></span>
+</div>
+
+<!-- Insights List -->
+<div id="insightsList">
+  <div style="text-align:center; padding:60px; color:var(--text-muted);">Loading questions...</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  let debounceTimer = null;
+
+  function debounceLoad() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(loadInsights, 350);
+  }
+
+  async function loadInsights() {
+    const module = document.getElementById('modFilter').value;
+    const difficulty = document.getElementById('diffFilter').value;
+    const search = document.getElementById('searchInput').value;
+
+    const params = new URLSearchParams();
+    if (module) params.append('module', module);
+    if (difficulty) params.append('difficulty', difficulty);
+    if (search) params.append('search', search);
+
+    try {
+      const res = await fetch(`/api/insights?${params.toString()}`);
+      const data = await res.json();
+
+      document.getElementById('insightCount').textContent = `${data.total} questions`;
+      renderInsights(data.questions);
+    } catch (e) {
+      document.getElementById('insightsList').innerHTML = '<p style="color:var(--danger); text-align:center; padding:40px;">Error loading questions.</p>';
+    }
+  }
+
+  function renderInsights(questions) {
+    const el = document.getElementById('insightsList');
+
+    if (!questions.length) {
+      el.innerHTML = '<div style="text-align:center; padding:60px; color:var(--text-muted);">No questions match your filters.</div>';
+      return;
+    }
+
+    el.innerHTML = questions.map((q, i) => {
+      const de = q.deep_explanation || {};
+      const wrongHtml = Object.entries(de.why_wrong || {}).map(([k, v]) => `
+        <div class="wrong-item">
+          <div class="wrong-key">Option ${k}</div>
+          <div class="wrong-exp">${v}</div>
+        </div>
+      `).join('');
+
+      const modColor = q.module === 'gmat' ? 'accent' : q.module === 'shl' ? 'success' : 'warning';
+      const diffColor = q.difficulty === 'easy' ? 'success' : q.difficulty === 'medium' ? 'accent' : 'danger';
+
+      return `
+        <div class="insight-card" id="ic${i}">
+          <div class="insight-q" onclick="toggleInsight(${i})">
+            <div>
+              <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
+                <span class="badge badge-${modColor}">${q.module.toUpperCase()}</span>
+                <span class="badge badge-${diffColor}">${q.difficulty}</span>
+                <span class="badge badge-muted">${(q.subtype||'').replace('_',' ')}</span>
+                <span class="badge badge-muted">${(q.topic||'').replace(/_/g,' ')}</span>
+              </div>
+              <div class="insight-q-text">${q.question}</div>
+              <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap;">
+                ${Object.entries(q.options).map(([k,v]) => `
+                  <span style="font-size:12px; padding:3px 8px; border-radius:4px; background:${k===q.correct?'var(--success-glow)':'var(--bg-secondary)'}; border:1px solid ${k===q.correct?'rgba(34,197,94,0.2)':'var(--border)'}; color:${k===q.correct?'var(--success)':'var(--text-muted)'}; font-family:var(--font-mono);">${k}: ${v}</span>
+                `).join('')}
+              </div>
+            </div>
+            <svg class="insight-expand" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <div class="insight-body">
+            <!-- Why Correct -->
+            <div class="insight-correct">
+              <div class="correct-tick">✓</div>
+              <div>
+                <div class="insight-correct-text">Correct Answer: ${q.correct}</div>
+                <div class="insight-correct-exp">${q.explanation}</div>
+                ${de.why_correct ? `<div style="margin-top:6px; font-size:13px; color:var(--text-muted);">${de.why_correct}</div>` : ''}
+              </div>
+            </div>
+
+            <!-- Why Wrong -->
+            ${wrongHtml ? `
+            <div style="padding:14px 22px 4px; font-size:12px; font-weight:600; color:var(--text-muted); letter-spacing:0.5px;">WHY OTHER OPTIONS ARE WRONG</div>
+            <div class="wrong-grid">${wrongHtml}</div>
+            ` : ''}
+
+            <!-- Strategy -->
+            ${de.strategy_tip ? `
+            <div style="padding:16px 22px;">
+              <div class="strategy-tip">${de.strategy_tip}</div>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleInsight(i) {
+    document.getElementById(`ic${i}`).classList.toggle('open');
+  }
+
+  // Initial load
+  loadInsights();
+</script>
+{% endblock %}
